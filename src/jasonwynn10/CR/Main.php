@@ -26,7 +26,6 @@ use pocketmine\entity\Entity;
 use pocketmine\form\Form;
 use pocketmine\IPlayer;
 use pocketmine\item\enchantment\Enchantment;
-use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\JsonNBTParser;
@@ -563,10 +562,10 @@ class Main extends PluginBase {
 	/**
 	 * @param string $type
 	 *
-	 * @return EnchantmentInstance
+	 * @return Enchantment
 	 * @throws \ReflectionException
 	 */
-	public function getRandomCE(string $type = "Common") : EnchantmentInstance {
+	public function getRandomCE(string $type = "Common") : Enchantment {
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$class = new \ReflectionClass(CustomEnchants::class);
 		/** @var Enchantment[] $enchantments */
@@ -599,7 +598,7 @@ class Main extends PluginBase {
 			break;
 		}
 		$enchantment = $typeEnchantments[array_rand($typeEnchantments)];
-		return new EnchantmentInstance($enchantment, mt_rand(1, $enchantment->getMaxLevel()));
+		return $enchantment->setLevel(mt_rand(1, 10));
 	}
 
 	/**

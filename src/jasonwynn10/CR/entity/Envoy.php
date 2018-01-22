@@ -52,6 +52,7 @@ class Envoy extends Entity {
 				$drops = $main->getEnvoyDrops("Mystical");
 				if($rand > 90) {
 					$item = Item::get(Item::ENCHANTED_BOOK);
+					/** @noinspection PhpUnhandledExceptionInspection */
 					$item->addEnchantment($main->getRandomCE("Rare"));
 					$drops[] = $item;
 				}
@@ -60,6 +61,7 @@ class Envoy extends Entity {
 				$drops = $main->getEnvoyDrops("Rare");
 				if($rand > 90) {
 					$item = Item::get(Item::ENCHANTED_BOOK);
+					/** @noinspection PhpUnhandledExceptionInspection */
 					$item->addEnchantment($main->getRandomCE("Mythic"));
 					$drops[] = $item;
 				}
@@ -69,6 +71,7 @@ class Envoy extends Entity {
 				$drops = $main->getEnvoyDrops("Common");
 				if($rand > 90) {
 					$item = Item::get(Item::ENCHANTED_BOOK);
+					/** @noinspection PhpUnhandledExceptionInspection */
 					$item->addEnchantment($main->getRandomCE("Common"));
 					$drops[] = $item;
 				}

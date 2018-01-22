@@ -8,7 +8,6 @@ use jasonwynn10\CR\object\PosAABB;
 use jasonwynn10\CR\task\FallCheckTask;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginCommand;
-use pocketmine\entity\Entity;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
 use pocketmine\Server;
@@ -46,10 +45,10 @@ class EnvoySetCommand extends PluginCommand {
 				}
 			}
 			/** @noinspection PhpUndefinedVariableInspection */
-			$nbt = Entity::createBaseNBT(new Vector3($randX, $sender->getLevel()->getWorldHeight(), $randZ), new Vector3(0, 0.1, 0));
+			$nbt = Envoy::createBaseNBT(new Vector3($randX, $sender->getLevel()->getWorldHeight(), $randZ), new Vector3(0, 0.1, 0));
 			/** @var Envoy $crystal */
-			$crystal = Entity::createEntity(Entity::ENDER_CRYSTAL, $sender->getLevel(), $nbt);
-			$rand = mt_rand(1, 100);
+			$crystal = Envoy::createEntity(Envoy::ENDER_CRYSTAL, $sender->getLevel(), $nbt);
+			$rand    = mt_rand(1, 100);
 			//if($rand > 90) {
 			//	$name = "Legendary";
 			//}else

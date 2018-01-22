@@ -15,14 +15,12 @@ use onebone\economyapi\event\money\AddMoneyEvent;
 use pocketmine\block\Block;
 use pocketmine\block\Cobblestone;
 use pocketmine\entity\Effect;
-use pocketmine\entity\Entity;
 use pocketmine\entity\Living;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\entity\EntityArmorChangeEvent;
 use pocketmine\event\entity\EntityDamageByChildEntityEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
-use pocketmine\event\entity\EntityDeathEvent;
 use pocketmine\event\inventory\InventoryCloseEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
@@ -30,10 +28,12 @@ use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\inventory\PlayerInventory;
+use pocketmine\IPlayer;
 use pocketmine\level\Position;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
 use pocketmine\tile\Chest;
+use ProjectInfinity\PocketVote\event\VoteEvent;
 
 class EventListener implements Listener {
 	/** @var Main $plugin */
@@ -44,6 +44,8 @@ class EventListener implements Listener {
 	public static $sentForms = [];
 	/** @var bool[] $cooldowns */
 	private static $cooldowns = [];
+	/** @var int[] $votes */
+	private static $votes = [];
 
 	/**
 	 * EventListener constructor.
@@ -85,6 +87,15 @@ class EventListener implements Listener {
 	 */
 	public static function getCooldowns() : array {
 		return self::$cooldowns;
+	}
+
+	/**
+	 * @param string $player
+	 *
+	 * @return int
+	 */
+	public static function hasVotes(string $player) : int {
+		return self::$votes[$player] ?? 0;
 	}
 
 	/**
@@ -211,7 +222,7 @@ class EventListener implements Listener {
 					break;
 					case 953:
 						if($rand > 92)
-							$event->setDamage(8); // 4 half-hearts
+							$event->setDamage(8); // 4 hearts
 					break;
 					case 954:
 						if(($damager->getHealth() / $damager->getMaxHealth()) <= 0.2 and self::$cooldowns[954]) {
@@ -253,23 +264,6 @@ class EventListener implements Listener {
 							continue;
 					}
 				}
-			}
-		}
-	}
-
-	/**
-	 * @priority MONITOR
-	 * @ignoreCancelled true
-	 *
-	 * @param EntityDeathEvent $event
-	 */
-	public function onDeath(EntityDeathEvent $event) : void {
-		$entity = $event->getEntity();
-		if($entity->getId() === Entity::ENDER_CRYSTAL) {
-			switch($entity->getName()) {
-				case "":
-					//
-				break;
 			}
 		}
 	}
@@ -339,26 +333,26 @@ class EventListener implements Listener {
 					case 450:
 						if($inventory->getBoots()->hasEnchantment(450)) {
 							$entity->addEffect(Effect::getEffect(Effect::SPEED)->setDuration(INT32_MAX));
-							$entity->addEffect(Effect::getEffect(Effect::JUMP_BOOST)->setDuration(INT32_MAX));
+							$entity->addEffect(Effect::getEffect(Effect::JUMP)->setDuration(INT32_MAX));
 						}else{
 							$entity->removeEffect(Effect::SPEED);
-							$entity->removeEffect(Effect::JUMP_BOOST);
+							$entity->removeEffect(Effect::JUMP);
 						}
 					break;
 					case 451:
 						if($inventory->getBoots()->hasEnchantment(451)) {
 							$entity->addEffect(Effect::getEffect(Effect::SPEED)->setAmplifier(1)->setDuration(INT32_MAX));
-							$entity->addEffect(Effect::getEffect(Effect::JUMP_BOOST)->setDuration(INT32_MAX));
+							$entity->addEffect(Effect::getEffect(Effect::JUMP)->setDuration(INT32_MAX));
 						}else{
 							$entity->removeEffect(Effect::SPEED);
-							$entity->removeEffect(Effect::JUMP_BOOST);
+							$entity->removeEffect(Effect::JUMP);
 						}
 					break;
 					case 452:
 						if($inventory->getBoots()->hasEnchantment(452)) {
-							$entity->addEffect(Effect::getEffect(Effect::JUMP_BOOST)->setDuration(INT32_MAX));
+							$entity->addEffect(Effect::getEffect(Effect::JUMP)->setDuration(INT32_MAX));
 						}else{
-							$entity->removeEffect(Effect::JUMP_BOOST);
+							$entity->removeEffect(Effect::JUMP);
 						}
 					break;
 					default:
@@ -395,6 +389,29 @@ class EventListener implements Listener {
 	public function onTap(PlayerInteractEvent $event) : void {
 		if($event->getItem()->getNamedTagEntry("VoteReward") !== null) {
 			Main::sendPlayerDelayedForm($event->getPlayer(), new VoteForm());
+		}
+	}
+
+	/**
+	 * @priority MONITOR
+	 * @ignoreCancelled false
+	 *
+	 * @param VoteEvent $event
+	 */
+	public function onVote(VoteEvent $event) : void {
+		if(!$event->isCancelled()) {
+			/** @var string|Player $player */
+			$player = $event->getPlayer();
+			if(is_string($player)) {
+				$player = $this->plugin->getServer()->getPlayer($player);
+			} elseif($player instanceof IPlayer) {
+				$player = $player->getPlayer();
+			}
+			if($player instanceof Player) {
+				self::$votes[$player->getName()] += 1;
+			} else {
+				self::$votes[$player] += 1;
+			}
 		}
 	}
 
