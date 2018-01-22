@@ -1,0 +1,20 @@
+{
+	"name": "Mystery Crate",
+	"identifier": "mystery.crate",
+	"content": [
+		{
+			"rouletteMessage": "{RED}x1 {YELLOW}Example rank",
+			"commands": [
+				"setgroup {player} 1"
+			],
+			"message": "{RED}> {YELLOW}You won a example rank!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		}
+	]
+}

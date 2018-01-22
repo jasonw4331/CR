@@ -1,0 +1,114 @@
+{
+  "950": [
+    "Berserker",
+    "Weapons",
+    "Damage",
+    "Mythic",
+    5,
+    "Gives more damage per hit"
+  ],
+  "951": [
+    "Frosty",
+    "Weapons",
+    "Damage",
+    "Common",
+    5,
+    "Gives slowness to enemies"
+  ],
+  "952": [
+    "Confusion",
+    "Weapons",
+    "Damage",
+    "Mythic",
+    3,
+    "Makes your opponent dizzy"
+  ],
+  "953": [
+    "Crazed",
+    "Weapons",
+    "Damage",
+    "Rare",
+    1,
+    "Deals 4 hearts of damage on chance"
+  ],
+  "250": [
+    "Slice",
+    "Tools",
+    "Damage",
+    "Common",
+    1,
+    "Deals 10% more damage on chance"
+  ],
+  "450": [
+    "Helios",
+    "Armor",
+    "Equip",
+    "Rare",
+    1,
+    "With boots and pants, wearer gets speed I and jump I. With chest plate and helmet wearer gets fire resistance I and night vision I"
+  ],
+  "451": [
+    "Kingsman",
+    "Armor",
+    "Equip",
+    "Mythic",
+    1,
+    "With Boots and Leggings, wearer gets speed II and jump boost I. With Chestplate and Helmet wearer gets night vision I and fire resistance II"
+  ],
+  "452": [
+    "Frosty",
+    "Armor",
+    "Equip",
+    "common",
+    1,
+    "With Boots and leggings, wearer gets jump boost I. With Helmet and Chestplate, wearer gets night vision I"
+  ],
+  "1050": [
+    "Lucky",
+    "Pickaxe",
+    "Break",
+    "Mythic",
+    1,
+    "5% chance of dropping a crate key while mining cobblestone"
+  ],
+  "150": [
+    "Healer",
+    "Global",
+    "Equip",
+    "Rare",
+    1,
+    "Creates a ring where players within the kingdom "
+  ],
+  "453": [
+    "Enthropy",
+    "Armor",
+    "Damage",
+    "Common",
+    3,
+    "When holder gets damaged, there is a 5% chance of returning that damage back to the attacker"
+  ],
+  "151": [
+    "Wizardry",
+    "Global",
+    "Equip",
+    "Rare",
+    1,
+    "Spawns a fireball moving in the direction the holder hits"
+  ],
+  "954": [
+    "Specter",
+    "Weapons",
+    "Damage",
+    "Common",
+    1,
+    "On low health, damage increases by 50%"
+  ],
+  "454": [
+    "Emperor's Blood",
+    "Armor",
+    "Damage",
+    "Mythic",
+    1,
+    "When the wearer dies, a ring of poison will appear within a 3 block radius around the position"
+  ]
+}

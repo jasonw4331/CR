@@ -1,0 +1,41 @@
+name: CR
+main: jasonwynn10\CR\Main
+version: 0.5.2
+api:
+ - 3.0.0
+ - 3.0.0-ALPHA9
+author: "jasonwynn10"
+description: "CastleRaid Core"
+depend:
+ - EconomyAPI
+ - PurePerms
+ - PureChat
+ - PocketVote
+ - PiggyCustomEnchants
+permissions:
+ cr:
+   default: op
+   description: ""
+   children:
+     cr.command:
+       default: op
+       description: ""
+       children:
+         cr.command.warpme:
+           default: true
+           description: ""
+         cr.command.kingdom:
+           default: true
+           description: ""
+         cr.command.vote:
+           default: true
+           description: ""
+         cr.command.combine:
+           default: op
+           description: ""
+         cr.command.envoytime:
+           default: true
+           description: ""
+         cr.command.envoyset:
+           default: true
+           description: ""

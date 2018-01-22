@@ -1,0 +1,48 @@
+# The time before the rank is removed from the player in hours
+RankTimeout: 24
+Ranks:
+  Knight:
+    Description: ""
+    Chat: "&3&l{kingdom}&e[{rank}]&f&r {display_name} &7> {msg}"
+    Effects:
+     - "speed 1 5"
+     - "jump_boost 2 5"
+    Items:
+     - stick 1 {display:{Name:"§eTHE POWER"},ench:[{id:12s,lvl:50s}]}
+     - stick 1 {display:{Name:"§eTHE POWER"},ench:[{id:12s,lvl:50s}]}
+  Farmer:
+    Description: ""
+    Chat: "&3&l{kingdom}&e[{rank}]&f&r {display_name} &7> {msg}"
+    Effects:
+     - "speed 1 5"
+     - "jump_boost 2 5"
+    Items:
+     - stick 1 {display:{Name:"§eTHE POWER"},ench:[{id:12s,lvl:50s}]}
+     - stick 1 {display:{Name:"§eTHE POWER"},ench:[{id:12s,lvl:50s}]}
+  Gladiator:
+    Description: ""
+    Chat: "&3&l{kingdom}&e[{rank}]&f&r {display_name} &7> {msg}"
+    Effects:
+     - "speed 1 5"
+     - "jump_boost 2 5"
+    Items:
+     - stick 1 {display:{Name:"§eTHE POWER"},ench:[{id:12s,lvl:50s}]}
+     - stick 1 {display:{Name:"§eTHE POWER"},ench:[{id:12s,lvl:50s}]}
+  Horseback:
+    Description: ""
+    Chat: "&3&l{kingdom}&e[{rank}]&f&r {display_name} &7> {msg}"
+    Effects:
+     - "speed 1 5"
+     - "jump_boost 2 5"
+    Items:
+     - stick 1 {display:{Name:"§eTHE POWER"},ench:[{id:12s,lvl:50s}]}
+     - stick 1 {display:{Name:"§eTHE POWER"},ench:[{id:12s,lvl:50s}]}
+  Mage:
+    Description: ""
+    Chat: "&3&l{kingdom}&e[{rank}]&f&r {display_name} &7> {msg}"
+    Effects:
+     - "speed 1 5"
+     - "jump_boost 2 5"
+    Items:
+     - stick 1 {display:{Name:"§eTHE POWER"},ench:[{id:12s,lvl:50s}]}
+     - stick 1 {display:{Name:"§eTHE POWER"},ench:[{id:12s,lvl:50s}]}

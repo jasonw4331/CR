@@ -1,0 +1,16 @@
+Message: "Envoys have dropped!" # This message will be broadcast to the entire server
+Drop Time: 60 # in minutes
+Ender Crystals: 5 # How many crates will spawn in the war zone every time?
+War Zones:
+- x1: 0
+  x2: 0
+  z1: 0
+  z2: 0
+  level: world
+Envoy Items:
+  Mystical:
+  - stick 1 {display:{Name:"§eTHE POWER"},ench:[{id:12s,lvl:50s}]}
+  Rare:
+  - stick 1 {display:{Name:"§eTHE POWER"},ench:[{id:12s,lvl:50s}]}
+  Common:
+  - stick 1 {display:{Name:"§eTHE POWER"},ench:[{id:12s,lvl:50s}]}

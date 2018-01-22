@@ -1,0 +1,76 @@
+setup-mode: true # Change this to false when setup is complete
+Kingdoms:
+  Dracosis:
+    Castle:
+      x: 0
+      "y": 100
+      z: 0
+      level: world # use the folder name
+    Village:
+      x: 0
+      "y": 100
+      z: 0
+      level: world # use the folder name
+  Quay:
+    Castle:
+      x: 0
+      "y": 100
+      z: 0
+      level: world # use the folder name
+    Village:
+      x: 0
+      "y": 100
+      z: 0
+      level: world # use the folder name
+  Cordian:
+    Castle:
+      x: 0
+      "y": 100
+      z: 0
+      level: world # use the folder name
+    Village:
+      x: 0
+      "y": 100
+      z: 0
+      level: world # use the folder name
+Power-Areas:
+  Areas:
+  - x1: 0 # smallest X coordinate
+    x2: 0 # largest X coordinate
+    z1: 0 # smallest Z coordinate
+    z2: 0 # largest Z coordinate
+    level: world # use the folder name
+    claimed: ""
+  - x1: 0 # smallest X coordinate
+    x2: 0 # largest X coordinate
+    z1: 0 # smallest Z coordinate
+    z2: 0 # largest Z coordinate
+    level: world # use the folder name
+    claimed: ""
+  - x1: 0 # smallest X coordinate
+    x2: 0 # largest X coordinate
+    z1: 0 # smallest Z coordinate
+    z2: 0 # largest Z coordinate
+    level: world # use the folder name
+    claimed: ""
+  - x1: 0 # smallest X coordinate
+    x2: 0 # largest X coordinate
+    z1: 0 # smallest Z coordinate
+    z2: 0 # largest Z coordinate
+    level: world # use the folder name
+    claimed: ""
+  Time-Per-Power: 30 # seconds per set power given to kingdom
+  Power-Per-Time: 2 # Power given every set amount of time
+  Area-Check-Time: 15 # seconds per area claim percent increase
+Taxes: # Taxes are percentage values out of 100
+  Dracosis: 2
+  Quay: 2
+  Cordian: 2
+Leaders:
+  Dracosis: "David2020xD"
+  Quay: "xXDismalAngelXx"
+  Cordian: "MistCraftPlays"
+Power:
+  Dracosis: 0
+  Quay: 0
+  Cordian: 0

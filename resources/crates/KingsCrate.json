@@ -1,0 +1,153 @@
+{
+	"name": "King's Crate",
+	"identifier": "king.crate",
+	"content": [
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		},
+		{
+			"rouletteMessage": "{RED}x32 {YELLOW}Stone",
+			"commands": [
+				"give {player} 1 32"
+			],
+			"message": "{RED}> {YELLOW}You won x32 stones!"
+		}
+	]
+}

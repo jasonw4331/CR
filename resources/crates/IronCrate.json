@@ -1,0 +1,28 @@
+{  
+   "name":"{GRAY}Iron Crate",
+   "identifier":"iron.crate",
+   "content":[  
+      {  
+         "rouletteMessage":"{RED}1x {GREEN}Steak",
+         "commands":[  
+            "give {player} cooked_beef 1"
+         ],
+         "message":"{RED} > {YELLOW}You won a steak"
+      },
+      {  
+         "rouletteMessage":"{RED}145x {GREEN}Steak",
+         "commands":[  
+            "give {player} cooked_beef 145"
+         ],
+         "message":"{RED} > {YELLOW}You won a steak"
+      },
+      {  
+         "rouletteMessage":"{RED}144x {GREEN}Steak",
+         "commands":[  
+            "give {player} cooked_beef 144"
+         ],
+         "message":"{RED} > {YELLOW}You won a steak"
+      }
+
+   ]
+}
