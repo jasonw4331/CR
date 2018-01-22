@@ -26,9 +26,10 @@ class VoteCommand extends PluginCommand {
 	 */
 	public function execute(CommandSender $sender, string $commandLabel, array $args) {
 		if($this->testPermission($sender) and $sender instanceof Player) {
-			//Main::sendPlayerDelayedForm($sender, new VoteForm()); //TODO: delete
 			if($sender instanceof Player and EventListener::hasVotes($sender->getName())) {
 				Main::sendPlayerDelayedForm($sender, new VoteForm());
+			} elseif($sender instanceof Player) {
+				$sender->sendMessage("You don't have any votes!");
 			}
 			return true;
 		}

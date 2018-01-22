@@ -8,6 +8,7 @@ use Crates\Loader;
 use jasonwynn10\CR\command\CombineCommand;
 use jasonwynn10\CR\command\EnvoyTimeCommand;
 use jasonwynn10\CR\command\KingdomCommand;
+use jasonwynn10\CR\command\VoteCommand;
 use jasonwynn10\CR\command\WarpMeCommand;
 use jasonwynn10\CR\entity\Envoy;
 use jasonwynn10\CR\form\MoneyGrantRequestForm;
@@ -115,7 +116,7 @@ class Main extends PluginBase {
 		$vote = $map->getCommand("vote");
 		$map->unregister($vote);
 		$map->register("cr", new CombineCommand($this));
-		//$map->register("cr", new VoteCommand($this));
+		$map->register("cr", new VoteCommand($this));
 		$map->register("cr", new KingdomCommand($this));
 		$map->register("cr", new WarpMeCommand($this));
 		$map->register("cr", new EnvoyTimeCommand($this));
