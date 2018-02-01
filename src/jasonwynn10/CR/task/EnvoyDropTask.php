@@ -36,7 +36,7 @@ class EnvoyDropTask extends PluginTask {
 		}
 		/** @noinspection PhpUndefinedMethodInspection */
 		$this->getOwner()->updateDropTime($this->dropTicks, $currentTick);
-		if($currentTick === $this->dropTicks) {
+		if($currentTick >= $this->dropTicks) {
 			/** @noinspection PhpUndefinedMethodInspection */
 			$this->getOwner()->dropEnvoys();
 		}

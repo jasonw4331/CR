@@ -6,6 +6,7 @@ use _64FF00\PureChat\PureChat;
 use _64FF00\PurePerms\PurePerms;
 use Crates\Loader;
 use jasonwynn10\CR\command\CombineCommand;
+use jasonwynn10\CR\command\EnvoySetCommand;
 use jasonwynn10\CR\command\EnvoyTimeCommand;
 use jasonwynn10\CR\command\KingdomCommand;
 use jasonwynn10\CR\command\VoteCommand;
@@ -17,8 +18,8 @@ use jasonwynn10\CR\object\PosAABB;
 use jasonwynn10\CR\task\AreaCheckTask;
 use jasonwynn10\CR\task\ClaimProgressDisplayTask;
 use jasonwynn10\CR\task\DelayedFormTask;
+use jasonwynn10\CR\task\EnvoyDespawnTask;
 use jasonwynn10\CR\task\EnvoyDropTask;
-use jasonwynn10\CR\task\FallCheckTask;
 use jasonwynn10\CR\task\PowerGiveTask;
 use onebone\economyapi\EconomyAPI;
 use PiggyCustomEnchants\CustomEnchants\CustomEnchants;
@@ -120,6 +121,7 @@ class Main extends PluginBase {
 		$map->register("cr", new KingdomCommand($this));
 		$map->register("cr", new WarpMeCommand($this));
 		$map->register("cr", new EnvoyTimeCommand($this));
+		$map->register("cr", new EnvoySetCommand($this));
 		$this->getLogger()->debug("Commands Registered!");
 
 		foreach($this->getConfig()->getNested("Power-Areas.Areas", []) as $areaKey => $areaData) {
@@ -515,12 +517,13 @@ class Main extends PluginBase {
 		/** @var array $zone */
 		foreach($this->envoyConfig->get("War Zones", []) as $zone) {
 			$level = $this->getServer()->getLevelByName($zone["level"]);
-			$posAABB = new PosAABB($zone["x1"], 0, $zone["z1"], $zone["x2"], $level->getWorldHeight(), $zone["z2"], $level);
+			$posAABB = new PosAABB((int) $zone["x1"], 0, (int) $zone["z1"], (int) $zone["x2"], $level->getWorldHeight(), (int) $zone["z2"], $level);
 			for($i = $this->envoyConfig->get("Ender Crystals", 5); $i > 0; $i--) {
-				$randX = mt_rand($posAABB->minX, $posAABB->maxX);
-				$randZ = mt_rand($posAABB->minZ, $posAABB->maxZ);
-				$nbt = Entity::createBaseNBT(new Vector3($randX, $level->getWorldHeight(), $randZ), new Vector3(0, 0.1, 0));
+				$randX = mt_rand((int) $posAABB->minX, (int) $posAABB->maxX);
+				$randZ = mt_rand((int) $posAABB->minZ, (int) $posAABB->maxZ);
+				$nbt = Entity::createBaseNBT(new Vector3($randX, $level->getWorldHeight(), $randZ), new Vector3(0, -0.1, 0));
 				$crystal = Entity::createEntity(Entity::ENDER_CRYSTAL, $level, $nbt);
+				$crystal->spawnToAll();
 				$rand = mt_rand(1, 100);
 				//if($rand > 90) {
 				//	$name = "Legendary";
@@ -536,9 +539,7 @@ class Main extends PluginBase {
 					$name = "Common";
 				}
 				$crystal->setNameTag($name." Envoy");
-				$this->getServer()->getScheduler()->scheduleRepeatingTask(
-					new FallCheckTask($this, $crystal->getId()),
-					1
+				$this->getServer()->getScheduler()->scheduleDelayedTask(new EnvoyDespawnTask($this, $crystal->getId()), 20 * 60 * 5 // 5 minutes
 				);
 			}
 		}

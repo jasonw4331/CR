@@ -4,8 +4,12 @@ namespace jasonwynn10\CR\entity;
 
 use jasonwynn10\CR\Main;
 use pocketmine\entity\Entity;
+use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\Item;
+use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\ByteTag;
+use pocketmine\Player;
 
 class Envoy extends Entity {
 	public const NETWORK_ID = self::ENDER_CRYSTAL;
@@ -21,9 +25,10 @@ class Envoy extends Entity {
 		}
 		$this->setMaxHealth(1000);
 		$this->setHealth(999);
-		$this->setCanSaveWithChunk(false);
+		$this->setCanSaveWithChunk(false); // when the server stops, don't save the envoy
 		$this->setNameTagAlwaysVisible(true);
 		$this->setNameTagVisible(true);
+		$this->setForceMovementUpdate(true);
 	}
 	public function entityBaseTick(int $tickDiff = 1) : bool{
 		if($this->closed){
@@ -38,8 +43,25 @@ class Envoy extends Entity {
 			$this->setHealth(1);
 			$hasUpdate = true;
 		}
+		elseif(!$this->onGround) {
+			$this->setForceMovementUpdate(true);
+			$this->setMotion(new Vector3(0, -2.5, 0));
+			$hasUpdate = true;
+		}
 
 		return $hasUpdate;
+	}
+
+	public function attack(EntityDamageEvent $source) {
+		if($source instanceof EntityDamageByEntityEvent) {
+			$player = $source->getDamager();
+			if($player instanceof Player) {
+				foreach($this->getDrops() as $item) {
+					$this->getLevel()->dropItem($this, $item);
+				}
+			}
+		}
+		return parent::attack($source);
 	}
 	public function getDrops() : array{
 		$rand = mt_rand(1, 100);

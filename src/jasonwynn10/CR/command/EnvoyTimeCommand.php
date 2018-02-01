@@ -29,7 +29,9 @@ class EnvoyTimeCommand extends PluginCommand {
 	public function execute(CommandSender $sender, string $commandLabel, array $args) {
 		if($this->testPermission($sender)) {
 			/** @noinspection PhpUndefinedMethodInspection */
-			$sender->sendMessage("The next envoy drop will be in " . $this->getPlugin()->getEnvoyDropTime() . " minutes");
+			/** @var int $time */
+			$time = $this->getPlugin()->getEnvoyDropTime();
+			$sender->sendMessage("The next envoy drop will be in " . ($time >= 1 ? $time . " minutes" : "less than one minute"));
 			return true;
 		}
 		return false;

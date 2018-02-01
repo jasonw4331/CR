@@ -4,6 +4,7 @@ namespace jasonwynn10\CR\task;
 
 use jasonwynn10\CR\Main;
 use pocketmine\scheduler\PluginTask;
+use pocketmine\Server;
 
 class EnvoyDespawnTask extends PluginTask {
 	/** @var int $eid */
@@ -24,6 +25,9 @@ class EnvoyDespawnTask extends PluginTask {
 	 * @param int $currentTick
 	 */
 	public function onRun(int $currentTick) {
-		// TODO: Implement onRun() method.
+		$entity = Server::getInstance()->findEntity($this->eid);
+		if($entity !== null) {
+			$entity->flagForDespawn();
+		}
 	}
 }

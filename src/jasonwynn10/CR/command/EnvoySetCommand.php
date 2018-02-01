@@ -5,7 +5,7 @@ namespace jasonwynn10\CR\command;
 use jasonwynn10\CR\entity\Envoy;
 use jasonwynn10\CR\Main;
 use jasonwynn10\CR\object\PosAABB;
-use jasonwynn10\CR\task\FallCheckTask;
+use jasonwynn10\CR\task\EnvoyDespawnTask;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginCommand;
 use pocketmine\math\Vector3;
@@ -37,18 +37,19 @@ class EnvoySetCommand extends PluginCommand {
 			$posAABB = new PosAABB($sender->x - (float) $args[0], 0, $sender->z - (float) $args[0], $sender->x + (float) $args[0], $sender->getLevel()->getWorldHeight(), $sender->z + (float) $args[0], $sender->getLevel());
 			$bool = true;
 			while($bool) {
-				$randX = mt_rand($posAABB->minX, $posAABB->maxX);
-				$randZ = mt_rand($posAABB->minZ, $posAABB->maxZ);
+				$randX = mt_rand((int) $posAABB->minX, (int) $posAABB->maxX);
+				$randZ = mt_rand((int) $posAABB->minZ, (int) $posAABB->maxZ);
 				$vec = new Vector3($randX, $sender->y, $randZ);
 				if($vec->distance($sender) >= (float) $args[0] and $vec->distance($sender) < ((float) $args[0] + 1)) {
 					$bool = false;
 				}
 			}
 			/** @noinspection PhpUndefinedVariableInspection */
-			$nbt = Envoy::createBaseNBT(new Vector3($randX, $sender->getLevel()->getWorldHeight(), $randZ), new Vector3(0, 0.1, 0));
+			$nbt = Envoy::createBaseNBT(new Vector3($randX, $sender->getLevel()->getWorldHeight(), $randZ), new Vector3(0, -0.1, 0));
 			/** @var Envoy $crystal */
 			$crystal = Envoy::createEntity(Envoy::ENDER_CRYSTAL, $sender->getLevel(), $nbt);
-			$rand    = mt_rand(1, 100);
+			$crystal->spawnToAll();
+			$rand = mt_rand(1, 100);
 			//if($rand > 90) {
 			//	$name = "Legendary";
 			//}else
@@ -64,9 +65,7 @@ class EnvoySetCommand extends PluginCommand {
 			}
 			$crystal->setNameTag($name." Envoy");
 			/** @noinspection PhpParamsInspection */
-			Server::getInstance()->getScheduler()->scheduleRepeatingTask(
-				new FallCheckTask($this->getPlugin(), $crystal->getId()),
-				1
+			Server::getInstance()->getScheduler()->scheduleDelayedTask(new EnvoyDespawnTask($this->getPlugin(), $crystal->getId()), 20 * 60 // 1 minute
 			);
 			/** @noinspection PhpUndefinedMethodInspection */
 			$message = $this->getPlugin()->getEnvoyConfig()->get("Message", "");
