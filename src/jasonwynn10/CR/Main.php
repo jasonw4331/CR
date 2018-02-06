@@ -103,15 +103,20 @@ class Main extends PluginBase {
 		$this->getLogger()->debug("PurePerms and PureChat ranks created/loaded!");
 
 		$resource = $this->getResource("CE.json");
-		$enchantments = json_decode(stream_get_contents($resource), true);
-		fclose($resource);
-
-		$cooldowns = [];
-		foreach(array_keys($enchantments) as $id) {
-			$cooldowns[$id] = true;
+		if($resource === null) {
+			$this->getLogger()->error("No Custom Enchantment resource found!");
+			$this->setEnabled(false);
+			return;
 		}
-
-		new EventListener($this, $cooldowns);
+		else {
+			$enchantments = json_decode(stream_get_contents($resource), true);
+			fclose($resource);
+			$cooldowns = [];
+			foreach(array_keys($enchantments) as $id) {
+				$cooldowns[$id] = true;
+			}
+			new EventListener($this, $cooldowns);
+		}
 
 		$map = $this->getServer()->getCommandMap();
 		$vote = $map->getCommand("vote");
@@ -159,15 +164,16 @@ class Main extends PluginBase {
 		$this->crates = new Loader($this);
 
 		$dropTime = (int) $this->envoyConfig->get("Drop Time", 60);
-		$this->getServer()->getScheduler()->scheduleRepeatingTask(
-			new EnvoyDropTask($this, $dropTime),
-			20 * 60
-		);
+		if($dropTime >= 1) {
+			$this->getServer()->getScheduler()->scheduleRepeatingTask(new EnvoyDropTask($this, $dropTime), 20 * 60);
+		}
 		$this->getLogger()->debug("Envoys Loaded!");
 	}
 
 	public function onDisable() {
-		$this->crates->onDisable();
+		if(isset($this->crates)) {
+			$this->crates->onDisable();
+		}
 		if($this->getConfig()->get("setup-mode", false)) {
 			$this->getLogger()->debug("config saving was cancelled!");
 			return;

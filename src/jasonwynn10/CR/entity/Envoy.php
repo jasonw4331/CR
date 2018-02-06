@@ -57,7 +57,10 @@ class Envoy extends Entity {
 			$player = $source->getDamager();
 			if($player instanceof Player) {
 				foreach($this->getDrops() as $item) {
-					$this->getLevel()->dropItem($this, $item);
+					$item = $this->getLevel()->dropItem($this, $item);
+					if($item !== null) {
+						$item->setCanSaveWithChunk(false);
+					}
 				}
 			}
 		}
