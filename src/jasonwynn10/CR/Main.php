@@ -158,6 +158,7 @@ class Main extends PluginBase {
 
 		foreach($enchantments as $id => $data) {
 			$ce->registerEnchantment($id, $data[0], $data[1], $data[2], $data[3], $data[4], $data[5]);
+			$this->getLogger()->debug("Registered " . $data[0] . " enchantment under id " . $id);
 		}
 		$this->getLogger()->debug("Enchantments Registered!");
 
