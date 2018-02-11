@@ -12,6 +12,7 @@ use jasonwynn10\CR\command\KingdomCommand;
 use jasonwynn10\CR\command\VoteCommand;
 use jasonwynn10\CR\command\WarpMeCommand;
 use jasonwynn10\CR\entity\Envoy;
+use jasonwynn10\CR\form\CRFormUtils;
 use jasonwynn10\CR\form\MoneyGrantRequestForm;
 use jasonwynn10\CR\object\Area;
 use jasonwynn10\CR\object\PosAABB;
@@ -23,12 +24,15 @@ use jasonwynn10\CR\task\EnvoyDropTask;
 use jasonwynn10\CR\task\PowerGiveTask;
 use onebone\economyapi\EconomyAPI;
 use PiggyCustomEnchants\CustomEnchants\CustomEnchants;
+use pocketmine\command\Command;
 use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
 use pocketmine\form\Form;
 use pocketmine\IPlayer;
 use pocketmine\item\enchantment\Enchantment;
+use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
+use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\JsonNBTParser;
 use pocketmine\nbt\tag\CompoundTag;
@@ -43,6 +47,8 @@ use pocketmine\utils\TextFormat;
 class Main extends PluginBase {
 	/** @var Main $instance */
 	private static $instance;
+	/** @var int */
+	public static $formCount = 0;
 	/** @var Config $players */
 	private $players;
 	/** @var Config $moneyRequestQueue */
@@ -83,6 +89,8 @@ class Main extends PluginBase {
 	}
 
 	public function onEnable() : void {
+		CRFormUtils::init();
+
 		foreach($this->getKingdomNames() as $kingdom) {
 			EconomyAPI::getInstance()->createAccount($kingdom."Kingdom", 1000.00, true);
 			$this->players->set($this->getConfig()->getNested("Leaders.".$kingdom, "blank"), $kingdom);
@@ -120,7 +128,9 @@ class Main extends PluginBase {
 
 		$map = $this->getServer()->getCommandMap();
 		$vote = $map->getCommand("vote");
-		$map->unregister($vote);
+		if($vote instanceof Command) {
+			$map->unregister($vote);
+		}
 		$map->register("cr", new CombineCommand($this));
 		$map->register("cr", new VoteCommand($this));
 		$map->register("cr", new KingdomCommand($this));
@@ -524,6 +534,10 @@ class Main extends PluginBase {
 		/** @var array $zone */
 		foreach($this->envoyConfig->get("War Zones", []) as $zone) {
 			$level = $this->getServer()->getLevelByName($zone["level"]);
+			if(!($level instanceof Level)) {
+				$this->getLogger()->notice("Level '" . $zone["level"] . "' couldn't be found and envoys failed to drop as a result!");
+				return;
+			}
 			$posAABB = new PosAABB((int) $zone["x1"], 0, (int) $zone["z1"], (int) $zone["x2"], $level->getWorldHeight(), (int) $zone["z2"], $level);
 			for($i = $this->envoyConfig->get("Ender Crystals", 5); $i > 0; $i--) {
 				$randX = mt_rand((int) $posAABB->minX, (int) $posAABB->maxX);
@@ -571,10 +585,9 @@ class Main extends PluginBase {
 	/**
 	 * @param string $type
 	 *
-	 * @return Enchantment
-	 * @throws \ReflectionException
+	 * @return EnchantmentInstance
 	 */
-	public function getRandomCE(string $type = "Common") : Enchantment {
+	public function getRandomCE(string $type = "Common") : EnchantmentInstance {
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$class = new \ReflectionClass(CustomEnchants::class);
 		/** @var Enchantment[] $enchantments */
@@ -606,8 +619,7 @@ class Main extends PluginBase {
 			});
 			break;
 		}
-		$enchantment = $typeEnchantments[array_rand($typeEnchantments)];
-		return $enchantment->setLevel(mt_rand(1, 10));
+		return new EnchantmentInstance($typeEnchantments[array_rand($typeEnchantments)], mt_rand(1, 10));
 	}
 
 	/**

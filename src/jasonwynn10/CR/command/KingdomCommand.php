@@ -32,7 +32,7 @@ class KingdomCommand extends PluginCommand {
 	public function execute(CommandSender $sender, string $commandLabel, array $args) {
 		if($this->testPermission($sender)) {
 			if($sender instanceof Player) {
-				Main::sendPlayerDelayedForm($sender, new KingdomInformationForm($sender));
+				Main::sendPlayerDelayedForm($sender, new KingdomInformationForm());
 			}
 			return true;
 		}

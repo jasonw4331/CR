@@ -27,6 +27,7 @@ use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerMoveEvent;
+use pocketmine\inventory\ContainerInventory;
 use pocketmine\inventory\PlayerInventory;
 use pocketmine\IPlayer;
 use pocketmine\level\Position;
@@ -36,14 +37,19 @@ use pocketmine\tile\Chest;
 use ProjectInfinity\PocketVote\event\VoteEvent;
 
 class EventListener implements Listener {
+
 	/** @var Main $plugin */
 	private $plugin;
+
 	/** @var PosAABB[] $poisonAABB */
 	private static $poisonAABB = [];
+
 	/** @var int[] $sentForms */
 	public static $sentForms = [];
+
 	/** @var bool[] $cooldowns */
 	private static $cooldowns = [];
+
 	/** @var int[] $votes */
 	private static $votes = [];
 
@@ -77,7 +83,8 @@ class EventListener implements Listener {
 		if(isset(self::$cooldowns[$enchantId])) {
 			self::$cooldowns[$enchantId] = $bool;
 			return true;
-		}else{
+		}
+		else {
 			return false;
 		}
 	}
@@ -109,16 +116,18 @@ class EventListener implements Listener {
 		if(empty($kingdom)) {
 			$kingdom = $this->plugin->getKingdomNames()[array_rand($this->plugin->getKingdomNames())];
 			$this->plugin->setPlayerKingdom($player, $kingdom);
-			$locName = array_rand(array_keys(Main::getInstance()->getConfig()->getNested("Kingdoms.".$kingdom, [])));
-			$posArr = $this->plugin->getConfig()->getNested("Kingdoms.".$kingdom.".".$locName, []);
+			$locName = array_rand(array_keys(Main::getInstance()->getConfig()->getNested("Kingdoms." . $kingdom, [])));
+			$posArr = $this->plugin->getConfig()->getNested("Kingdoms." . $kingdom . "." . $locName, []);
 			if(!empty($posArr)) {
 				$level = $this->plugin->getServer()->getLevelByName($posArr["level"]);
 				if($level === null) {
 					Main::getInstance()->getLogger()->debug("Invalid Level '{$posArr["level"]}' in $locName!");
-				}else{
+				}
+				else {
 					$player->teleport(new Position($posArr["x"], $posArr["y"], $posArr["z"], $level));
 				}
-			}else{
+			}
+			else {
 				Main::getInstance()->getLogger()->debug("Empty Teleport Array!");
 			}
 			//Main::sendPlayerDelayedForm($event->getPlayer(), new KingdomSelectionForm(), 60); // wait 3 seconds after join to send form
@@ -141,7 +150,7 @@ class EventListener implements Listener {
 	}
 
 	/**
-	 * @priority LOW
+	 * @priority        LOW
 	 * @ignoreCancelled true
 	 *
 	 * @param AddMoneyEvent $event
@@ -152,17 +161,17 @@ class EventListener implements Listener {
 			if($kingdom !== null) {
 				$event->setCancelled();
 				$amount = $event->getAmount();
-				$percent = abs((int)$this->plugin->getConfig()->getNested("Taxes.".$kingdom, 2)) / 100;
+				$percent = abs((int) $this->plugin->getConfig()->getNested("Taxes." . $kingdom, 2)) / 100;
 				$economy = EconomyAPI::getInstance();
-				$economy->addMoney($kingdom."Kingdom", $percent * $amount, false, "cr");
+				$economy->addMoney($kingdom . "Kingdom", $percent * $amount, false, "cr");
 				$economy->addMoney($event->getUsername(), $amount - ($percent * $amount), false, "cr");
-				$this->plugin->getLogger()->debug($event->getUsername()." has been taxed!");
+				$this->plugin->getLogger()->debug($event->getUsername() . " has been taxed!");
 			}
 		}
 	}
 
 	/**
-	 * @priority HIGHEST
+	 * @priority        HIGHEST
 	 * @ignoreCancelled false
 	 *
 	 * @param PlayerChatEvent $event
@@ -170,15 +179,16 @@ class EventListener implements Listener {
 	public function onPlayerChat(PlayerChatEvent $event) : void {
 		$player = $event->getPlayer();
 		$kingdom = $this->plugin->getPlayerKingdom($player);
-		if($kingdom === null)
+		if($kingdom === null) {
 			return;
+		}
 		$format = str_replace("{kingdom}", $kingdom, $event->getFormat());
 		$format = str_replace("{isLeader}", $this->plugin->getKingdomLeader($kingdom) === $player->getName() ? "Leader" : "", $format);
 		$event->setFormat($format);
 	}
 
 	/**
-	 * @priority HIGHEST
+	 * @priority        HIGHEST
 	 * @ignoreCancelled false
 	 *
 	 * @param EntityDamageEvent $event
@@ -187,16 +197,18 @@ class EventListener implements Listener {
 		if($event instanceof EntityDamageByChildEntityEvent and $event->getCause() === EntityDamageEvent::CAUSE_PROJECTILE) {
 			$damager = $event->getDamager();
 			$damaged = $event->getEntity();
-		}elseif($event instanceof EntityDamageByEntityEvent and $event->getCause() === EntityDamageEvent::CAUSE_ENTITY_ATTACK) {
+		}
+		elseif($event instanceof EntityDamageByEntityEvent and $event->getCause() === EntityDamageEvent::CAUSE_ENTITY_ATTACK) {
 			$damager = $event->getDamager();
 			$damaged = $event->getEntity();
-		}else{
+		}
+		else {
 			return;
 		}
 		if($damager instanceof Player) {
 			$hand = $damager->getInventory()->getItemInHand();
 			foreach($hand->getEnchantments() as $enchantment) {
-				$rand = mt_rand(1,100);
+				$rand = mt_rand(1, 100);
 				switch($enchantment->getId()) {
 					case 250:
 						if($rand > 90) {
@@ -221,8 +233,9 @@ class EventListener implements Listener {
 						}
 					break;
 					case 953:
-						if($rand > 92)
+						if($rand > 92) {
 							$event->setDamage(8); // 4 hearts
+						}
 					break;
 					case 954:
 						if(($damager->getHealth() / $damager->getMaxHealth()) <= 0.2 and self::$cooldowns[954]) {
@@ -241,7 +254,7 @@ class EventListener implements Listener {
 			}
 		}
 		if($damaged instanceof Player) {
-			$armour = $damaged->getInventory()->getArmorContents();
+			$armour = $damaged->getArmorInventory()->getContents();
 			foreach($armour as $armourPiece) {
 				foreach($armourPiece->getEnchantments() as $enchantment) {
 					$rand = mt_rand(1, 100);
@@ -269,7 +282,7 @@ class EventListener implements Listener {
 	}
 
 	/**
-	 * @priority MONITOR
+	 * @priority        MONITOR
 	 * @ignoreCancelled true
 	 *
 	 * @param PlayerMoveEvent $event
@@ -284,7 +297,7 @@ class EventListener implements Listener {
 	}
 
 	/**
-	 * @priority MONITOR
+	 * @priority        MONITOR
 	 * @ignoreCancelled true
 	 *
 	 * @param EntityArmorChangeEvent $event
@@ -293,32 +306,35 @@ class EventListener implements Listener {
 		$entity = $event->getEntity();
 		if($entity instanceof Player) {
 			/** @var PlayerInventory $inventory */
-			$inventory = $entity->getInventory();
-			$item = $inventory->getHelmet();
+			$armor = $entity->getArmorInventory();
+			$item = $armor->getHelmet();
 			foreach($item->getEnchantments() as $enchantment) {
 				switch($enchantment->getId()) {
 					case 450:
-						if($inventory->getChestplate()->hasEnchantment(450)) {
+						if($armor->getChestplate()->hasEnchantment(450)) {
 							$entity->addEffect(Effect::getEffect(Effect::FIRE_RESISTANCE)->setDuration(INT32_MAX));
 							$entity->addEffect(Effect::getEffect(Effect::NIGHT_VISION)->setDuration(INT32_MAX));
-						}else{
+						}
+						else {
 							$entity->removeEffect(Effect::FIRE_RESISTANCE);
 							$entity->removeEffect(Effect::NIGHT_VISION);
 						}
 					break;
 					case 451:
-						if($inventory->getChestplate()->hasEnchantment(450)) {
+						if($armor->getChestplate()->hasEnchantment(450)) {
 							$entity->addEffect(Effect::getEffect(Effect::FIRE_RESISTANCE)->setDuration(INT32_MAX)->setAmplifier(1));
 							$entity->addEffect(Effect::getEffect(Effect::NIGHT_VISION)->setDuration(INT32_MAX));
-						}else{
+						}
+						else {
 							$entity->removeEffect(Effect::FIRE_RESISTANCE);
 							$entity->removeEffect(Effect::NIGHT_VISION);
 						}
 					break;
 					case 452:
-						if($inventory->getChestplate()->hasEnchantment(450)) {
+						if($armor->getChestplate()->hasEnchantment(450)) {
 							$entity->addEffect(Effect::getEffect(Effect::NIGHT_VISION)->setDuration(INT32_MAX));
-						}else{
+						}
+						else {
 							$entity->removeEffect(Effect::NIGHT_VISION);
 						}
 					break;
@@ -327,31 +343,34 @@ class EventListener implements Listener {
 					break;
 				}
 			}
-			$item = $inventory->getLeggings();
+			$item = $armor->getLeggings();
 			foreach($item->getEnchantments() as $enchantment) {
 				switch($enchantment->getId()) {
 					case 450:
-						if($inventory->getBoots()->hasEnchantment(450)) {
+						if($armor->getBoots()->hasEnchantment(450)) {
 							$entity->addEffect(Effect::getEffect(Effect::SPEED)->setDuration(INT32_MAX));
 							$entity->addEffect(Effect::getEffect(Effect::JUMP)->setDuration(INT32_MAX));
-						}else{
+						}
+						else {
 							$entity->removeEffect(Effect::SPEED);
 							$entity->removeEffect(Effect::JUMP);
 						}
 					break;
 					case 451:
-						if($inventory->getBoots()->hasEnchantment(451)) {
+						if($armor->getBoots()->hasEnchantment(451)) {
 							$entity->addEffect(Effect::getEffect(Effect::SPEED)->setAmplifier(1)->setDuration(INT32_MAX));
 							$entity->addEffect(Effect::getEffect(Effect::JUMP)->setDuration(INT32_MAX));
-						}else{
+						}
+						else {
 							$entity->removeEffect(Effect::SPEED);
 							$entity->removeEffect(Effect::JUMP);
 						}
 					break;
 					case 452:
-						if($inventory->getBoots()->hasEnchantment(452)) {
+						if($armor->getBoots()->hasEnchantment(452)) {
 							$entity->addEffect(Effect::getEffect(Effect::JUMP)->setDuration(INT32_MAX));
-						}else{
+						}
+						else {
 							$entity->removeEffect(Effect::JUMP);
 						}
 					break;
@@ -364,7 +383,7 @@ class EventListener implements Listener {
 	}
 
 	/**
-	 * @priority MONITOR
+	 * @priority        MONITOR
 	 * @ignoreCancelled false
 	 *
 	 * @param BlockBreakEvent $event
@@ -381,7 +400,7 @@ class EventListener implements Listener {
 	}
 
 	/**
-	 * @priority MONITOR
+	 * @priority        MONITOR
 	 * @ignoreCancelled false
 	 *
 	 * @param PlayerInteractEvent $event
@@ -393,7 +412,7 @@ class EventListener implements Listener {
 	}
 
 	/**
-	 * @priority MONITOR
+	 * @priority        MONITOR
 	 * @ignoreCancelled false
 	 *
 	 * @param VoteEvent $event
@@ -416,16 +435,19 @@ class EventListener implements Listener {
 	}
 
 	/**
-	 * @priority MONITOR
+	 * @priority        MONITOR
 	 * @ignoreCancelled true
 	 *
 	 * @param InventoryCloseEvent $event
 	 */
 	public function onInventoryClose(InventoryCloseEvent $event) : void {
-		$holder = $event->getInventory()->getHolder();
-		if($holder instanceof Chest and $holder->namedtag->hasTag("Envoy", StringTag::class)) {
-			$holder->getLevel()->setBlock($holder, Block::get(Block::AIR), false, false);
-			$holder->close();
+		$inventory = $event->getInventory();
+		if($inventory instanceof ContainerInventory) {
+			$holder = $inventory->getHolder();
+			if($holder instanceof Chest and $holder->namedtag->hasTag("Envoy", StringTag::class)) {
+				$holder->getLevel()->setBlock($holder, Block::get(Block::AIR), false, false);
+				$holder->close();
+			}
 		}
 	}
 }

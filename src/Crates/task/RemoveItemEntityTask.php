@@ -22,7 +22,8 @@ class RemoveItemEntityTask extends Task {
 	 * @param int $currentTick
 	 */
 	public function onRun(int $currentTick) {
-		if(!$this->entity->isClosed() and !$this->entity->isFlaggedForDespawn())
+		if(!$this->entity->isClosed() and !$this->entity->isFlaggedForDespawn()) {
 			$this->entity->flagForDespawn();
+		}
 	}
 }

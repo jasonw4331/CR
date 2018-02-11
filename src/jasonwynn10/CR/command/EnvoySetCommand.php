@@ -57,22 +57,26 @@ class EnvoySetCommand extends PluginCommand {
 				$rand = mt_rand(1, 100);
 				if($rand > 50) {
 					$name = "Mystical";
-				}else{
+				}
+				else {
 					$name = "Rare";
 				}
-			}else{
+			}
+			else {
 				$name = "Common";
 			}
-			$crystal->setNameTag($name." Envoy");
+			$crystal->setNameTag($name . " Envoy");
 			/** @noinspection PhpParamsInspection */
 			Server::getInstance()->getScheduler()->scheduleDelayedTask(new EnvoyDespawnTask($this->getPlugin(), $crystal->getId()), 20 * 60 // 1 minute
 			);
 			/** @noinspection PhpUndefinedMethodInspection */
 			$message = $this->getPlugin()->getEnvoyConfig()->get("Message", "");
-			if(!empty($message))
+			if(!empty($message)) {
 				Server::getInstance()->broadcastMessage($message);
+			}
 			return true;
-		}else{
+		}
+		else {
 			return false;
 		}
 	}
