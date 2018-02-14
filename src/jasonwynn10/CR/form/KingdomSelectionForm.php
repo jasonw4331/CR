@@ -1,46 +1,36 @@
 <?php
+
 declare(strict_types=1);
+
 namespace jasonwynn10\CR\form;
 
 use jasonwynn10\CR\Main;
-use pocketmine\form\Form;
-use pocketmine\form\MenuForm;
-use pocketmine\form\MenuOption;
 use pocketmine\Player;
 
-class KingdomSelectionForm extends MenuForm {
-	/**
-	 * KingdomSelectionForm constructor.
-	 */
-	public function __construct() {
-		$options = [];
-		foreach(Main::getInstance()->getKingdomNames() as $kingdom) {
-			$options[] = new MenuOption($kingdom);
+class KingdomSelectionForm extends CRSimpleForm {
+
+	public function setup(Player $player) : void {
+		$this->setTitle("Kingdom Selection");
+		$this->setContent("Choose a kingdom to start!");
+		foreach(shuffle(Main::getInstance()->getKingdomNames()) as $name) {
+			$this->addButton($name, -1, "", $name);
 		}
-		shuffle($options);
-		parent::__construct("Kingdom Selection", "Choose a kingdom to start!", $options);
 	}
 
 	/**
 	 * @param Player $player
-	 *
-	 * @return null|Form
+	 * @param mixed  $data
 	 */
-	public function onClose(Player $player) : ?Form {
-		return new self;
-	}
+	public function onSubmit(Player $player, $data) : void {
+		if($data === null) {
+			return;
+		}
 
-	/**
-	 * @param Player $player
-	 *
-	 * @return null|Form
-	 */
-	public function onSubmit(Player $player) : ?Form {
-		$option = $this->getSelectedOption()->getText();
-		if(Main::getInstance()->setPlayerKingdom($player, $option)) {
-			return new TeleportLocationForm($option, false);
-		}else{
-			return new self;
+		if(Main::getInstance()->setPlayerKingdom($player, $data)) {
+			(new TeleportLocationForm($data, false))->sendToPlayer($player);
+		} else {
+			(new KingdomSelectionForm())->sendToPlayer($player);
 		}
 	}
+
 }

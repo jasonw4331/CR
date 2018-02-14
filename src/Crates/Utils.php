@@ -13,6 +13,7 @@ use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 
 class Utils {
+
 	/**
 	 * @param string $message
 	 *
@@ -66,8 +67,7 @@ class Utils {
 		$array = explode(",", $string);
 		if(isset($array[3]) and ($level = Server::getInstance()->getLevelByName($array[0])) != null) {
 			return new Position($array[1], $array[2], $array[3], $level);
-		}
-		else {
+		} else {
 			return null;
 		}
 	}

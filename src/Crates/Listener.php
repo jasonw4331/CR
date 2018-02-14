@@ -13,6 +13,7 @@ use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 
 class Listener implements PluginListener {
+
 	/**
 	 * @param PlayerJoinEvent $event
 	 */

@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace jasonwynn10\CR\form;
 
 use jojoe77777\FormAPI\FormAPI;
@@ -7,6 +9,7 @@ use pocketmine\plugin\Plugin;
 use pocketmine\Server;
 
 class CRFormUtils {
+
 	/** @var FormAPI|null */
 	private static $formApi = null;
 
@@ -25,4 +28,5 @@ class CRFormUtils {
 	public static function getFormAPI() {
 		return static::$formApi;
 	}
+
 }

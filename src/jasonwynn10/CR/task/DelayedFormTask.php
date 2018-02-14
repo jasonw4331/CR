@@ -1,15 +1,18 @@
 <?php
 declare(strict_types=1);
+
 namespace jasonwynn10\CR\task;
 
 use jasonwynn10\CR\Main;
-use pocketmine\form\Form;
+use jojoe77777\FormAPI\Form;
 use pocketmine\Player;
 use pocketmine\scheduler\PluginTask;
 
 class DelayedFormTask extends PluginTask {
+
 	/** @var Form $form */
 	private $form;
+
 	/** @var string $player */
 	private $player;
 
@@ -22,7 +25,7 @@ class DelayedFormTask extends PluginTask {
 	 */
 	public function __construct(Main $owner, Form $form, Player $player) {
 		parent::__construct($owner);
-		$this->form = $form;
+		$this->form   = $form;
 		$this->player = $player->getName();
 	}
 
@@ -32,8 +35,8 @@ class DelayedFormTask extends PluginTask {
 	public function onRun(int $currentTick) {
 		$player = $this->getOwner()->getServer()->getPlayerExact($this->player);
 		if($player !== null) {
-			$player->sendForm($this->form, true);
-			$this->getOwner()->getLogger()->debug(get_class($this)." sent to Player ".$player->getName());
+			$this->form->sendToPlayer($player);
+			$this->getOwner()->getLogger()->debug(get_class($this) . " sent to Player " . $player->getName());
 		}
 	}
 }

@@ -1,16 +1,17 @@
 <?php
 declare(strict_types=1);
+
 namespace jasonwynn10\CR\form;
 
 use jasonwynn10\CR\Main;
 use onebone\economyapi\EconomyAPI;
-use pocketmine\form\Form;
-use pocketmine\form\ModalForm;
 use pocketmine\Player;
 
-class MoneyGrantRequestForm extends ModalForm {
+class MoneyGrantRequestForm extends CRModalForm {
+
 	/** @var string $requester */
 	private $requester;
+
 	/** @var float $amount */
 	private $amount;
 
@@ -22,26 +23,34 @@ class MoneyGrantRequestForm extends ModalForm {
 	 */
 	public function __construct(string $requester, float $amount) {
 		$this->requester = $requester;
-		$this->amount = $amount;
-		parent::__construct("Money Requested from ".$requester, "Grant the requested $".$amount."?");
+		$this->amount    = $amount;
+
+		parent::__construct();
+	}
+
+	protected function setup(Player $player) : void {
+		$this->setTitle("Money Requested from " . $this->requester);
+		$this->setContent("Grant the requested $" . $this->amount . "?");
 	}
 
 	/**
 	 * @param Player $player
-	 *
-	 * @return null|Form
+	 * @param mixed  $data
 	 */
-	public function onSubmit(Player $player) : ?Form {
-		if($this->getChoice()) {
+	public function onSubmit(Player $player, $data) : void {
+		if($data === null) {
+			return;
+		}
+
+		if($this->getButton1()) {
 			$economy = EconomyAPI::getInstance();
-			$main = Main::getInstance();
-			$return = $economy->reduceMoney($main->getPlayerKingdom($player)."Kingdom", $this->amount, false, "CR");
+			$main    = Main::getInstance();
+			$return  = $economy->reduceMoney($main->getPlayerKingdom($player) . "Kingdom", $this->amount, false, "CR");
 			if($return === EconomyAPI::RET_SUCCESS) {
 				$economy->addMoney($this->requester, $this->amount, false, "CR");
 				$main->getMoneyRequestQueue()->remove($this->requester);
 				$main->getMoneyRequestQueue()->save();
 			}
 		}
-		return null;
 	}
 }

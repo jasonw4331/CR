@@ -1,13 +1,16 @@
 <?php
 declare(strict_types=1);
+
 namespace jasonwynn10\CR\task;
 
 use pocketmine\plugin\Plugin;
 use pocketmine\scheduler\PluginTask;
 
 class EnvoyDropTask extends PluginTask {
+
 	/** @var int $dropTicks */
 	private $dropTicks;
+
 	/** @var bool $first */
 	private $first = true;
 
@@ -15,12 +18,12 @@ class EnvoyDropTask extends PluginTask {
 	 * EnvoyDropTask constructor.
 	 *
 	 * @param Plugin $owner
-	 * @param int $dropTicks
+	 * @param int    $dropTicks
 	 */
 	public function __construct(Plugin $owner, int $dropTicks) {
 		parent::__construct($owner);
 		$this->dropTicks = $dropTicks;
-		$this->first = true;
+		$this->first     = true;
 	}
 
 	/**

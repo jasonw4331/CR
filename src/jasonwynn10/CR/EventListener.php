@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace jasonwynn10\CR;
 
 //use jasonwynn10\CR\form\KingdomSelectionForm;
@@ -56,12 +57,12 @@ class EventListener implements Listener {
 	/**
 	 * EventListener constructor.
 	 *
-	 * @param Main $plugin
+	 * @param Main  $plugin
 	 * @param array $cooldowns
 	 */
 	public function __construct(Main $plugin, array $cooldowns) {
 		$plugin->getServer()->getPluginManager()->registerEvents($this, $plugin);
-		$this->plugin = $plugin;
+		$this->plugin    = $plugin;
 		self::$cooldowns = $cooldowns;
 		$plugin->getLogger()->debug("Event Listener Registered!");
 	}
@@ -74,7 +75,7 @@ class EventListener implements Listener {
 	}
 
 	/**
-	 * @param int $enchantId
+	 * @param int  $enchantId
 	 * @param bool $bool enable use
 	 *
 	 * @return bool success or failure
@@ -83,8 +84,7 @@ class EventListener implements Listener {
 		if(isset(self::$cooldowns[$enchantId])) {
 			self::$cooldowns[$enchantId] = $bool;
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
@@ -111,23 +111,21 @@ class EventListener implements Listener {
 	 * @param PlayerJoinEvent $event
 	 */
 	public function onJoin(PlayerJoinEvent $event) : void {
-		$player = $event->getPlayer();
+		$player  = $event->getPlayer();
 		$kingdom = $this->plugin->getPlayerKingdom($player);
 		if(empty($kingdom)) {
 			$kingdom = $this->plugin->getKingdomNames()[array_rand($this->plugin->getKingdomNames())];
 			$this->plugin->setPlayerKingdom($player, $kingdom);
 			$locName = array_rand(array_keys(Main::getInstance()->getConfig()->getNested("Kingdoms." . $kingdom, [])));
-			$posArr = $this->plugin->getConfig()->getNested("Kingdoms." . $kingdom . "." . $locName, []);
+			$posArr  = $this->plugin->getConfig()->getNested("Kingdoms." . $kingdom . "." . $locName, []);
 			if(!empty($posArr)) {
 				$level = $this->plugin->getServer()->getLevelByName($posArr["level"]);
 				if($level === null) {
 					Main::getInstance()->getLogger()->debug("Invalid Level '{$posArr["level"]}' in $locName!");
-				}
-				else {
+				} else {
 					$player->teleport(new Position($posArr["x"], $posArr["y"], $posArr["z"], $level));
 				}
-			}
-			else {
+			} else {
 				Main::getInstance()->getLogger()->debug("Empty Teleport Array!");
 			}
 			//Main::sendPlayerDelayedForm($event->getPlayer(), new KingdomSelectionForm(), 60); // wait 3 seconds after join to send form
@@ -160,7 +158,7 @@ class EventListener implements Listener {
 			$kingdom = $this->plugin->getPlayerKingdom($this->plugin->getServer()->getOfflinePlayer($event->getUsername())->getPlayer() ?? $this->plugin->getServer()->getOfflinePlayer($event->getUsername()));
 			if($kingdom !== null) {
 				$event->setCancelled();
-				$amount = $event->getAmount();
+				$amount  = $event->getAmount();
 				$percent = abs((int) $this->plugin->getConfig()->getNested("Taxes." . $kingdom, 2)) / 100;
 				$economy = EconomyAPI::getInstance();
 				$economy->addMoney($kingdom . "Kingdom", $percent * $amount, false, "cr");
@@ -177,7 +175,7 @@ class EventListener implements Listener {
 	 * @param PlayerChatEvent $event
 	 */
 	public function onPlayerChat(PlayerChatEvent $event) : void {
-		$player = $event->getPlayer();
+		$player  = $event->getPlayer();
 		$kingdom = $this->plugin->getPlayerKingdom($player);
 		if($kingdom === null) {
 			return;
@@ -197,12 +195,10 @@ class EventListener implements Listener {
 		if($event instanceof EntityDamageByChildEntityEvent and $event->getCause() === EntityDamageEvent::CAUSE_PROJECTILE) {
 			$damager = $event->getDamager();
 			$damaged = $event->getEntity();
-		}
-		elseif($event instanceof EntityDamageByEntityEvent and $event->getCause() === EntityDamageEvent::CAUSE_ENTITY_ATTACK) {
+		} elseif($event instanceof EntityDamageByEntityEvent and $event->getCause() === EntityDamageEvent::CAUSE_ENTITY_ATTACK) {
 			$damager = $event->getDamager();
 			$damaged = $event->getEntity();
-		}
-		else {
+		} else {
 			return;
 		}
 		if($damager instanceof Player) {
@@ -215,28 +211,28 @@ class EventListener implements Listener {
 							$damage = $event->getDamage();
 							$event->setDamage($damage + ($damage * .1));
 						}
-					break;
+						break;
 					case 950:
 						if($rand > 85 - ($enchantment->getLevel() * 5)) {
 							$damage = $event->getDamage();
 							$event->setDamage($damage + ($damage * .2));
 						}
-					break;
+						break;
 					case 951:
 						if($rand > 85 - ($enchantment->getLevel() * 5) and $damaged instanceof Living) {
 							$damaged->addEffect(Effect::getEffect(Effect::SLOWNESS));
 						}
-					break;
+						break;
 					case 952:
 						if($rand > 0 and $damaged instanceof Living) {
 							$damaged->addEffect(Effect::getEffect(Effect::NAUSEA)->setDuration((2 * 20) + ($enchantment->getLevel() * 20)));
 						}
-					break;
+						break;
 					case 953:
 						if($rand > 92) {
-							$event->setDamage(8); // 4 hearts
-						}
-					break;
+							$event->setDamage(8);
+						} // 4 hearts
+						break;
 					case 954:
 						if(($damager->getHealth() / $damager->getMaxHealth()) <= 0.2 and self::$cooldowns[954]) {
 							$damage = $event->getDamage();
@@ -247,7 +243,7 @@ class EventListener implements Listener {
 								20 * 60 * 5 // 5 Minutes
 							);
 						}
-					break;
+						break;
 					default:
 						continue;
 				}
@@ -263,7 +259,7 @@ class EventListener implements Listener {
 							if($rand > 98 - ($enchantment->getLevel() * 2)) {
 								$damager->attack(new EntityDamageByEntityEvent($damaged, $damager, EntityDamageEvent::CAUSE_MAGIC, $event->getFinalDamage(), 0));
 							}
-						break;
+							break;
 						case 454:
 							if($damaged->getHealth() - $event->getFinalDamage() <= 0) {
 								$this->plugin->getServer()->getScheduler()->scheduleDelayedTask(
@@ -272,7 +268,7 @@ class EventListener implements Listener {
 								);
 								self::$poisonAABB[] = new PosAABB($damaged->x - 1, $damaged->getFloorY(), $damaged->z - 1, $damaged->x + 1, $damaged->y, $damaged->z + 1, $damaged->getLevel());
 							}
-						break;
+							break;
 						default:
 							continue;
 					}
@@ -306,41 +302,38 @@ class EventListener implements Listener {
 		$entity = $event->getEntity();
 		if($entity instanceof Player) {
 			/** @var PlayerInventory $inventory */
-			$armor = $entity->getArmorInventory();
-			$item = $armor->getHelmet();
+			$armor  = $entity->getArmorInventory();
+			$item   = $armor->getHelmet();
 			foreach($item->getEnchantments() as $enchantment) {
 				switch($enchantment->getId()) {
 					case 450:
 						if($armor->getChestplate()->hasEnchantment(450)) {
 							$entity->addEffect(Effect::getEffect(Effect::FIRE_RESISTANCE)->setDuration(INT32_MAX));
 							$entity->addEffect(Effect::getEffect(Effect::NIGHT_VISION)->setDuration(INT32_MAX));
-						}
-						else {
+						} else {
 							$entity->removeEffect(Effect::FIRE_RESISTANCE);
 							$entity->removeEffect(Effect::NIGHT_VISION);
 						}
-					break;
+						break;
 					case 451:
 						if($armor->getChestplate()->hasEnchantment(450)) {
 							$entity->addEffect(Effect::getEffect(Effect::FIRE_RESISTANCE)->setDuration(INT32_MAX)->setAmplifier(1));
 							$entity->addEffect(Effect::getEffect(Effect::NIGHT_VISION)->setDuration(INT32_MAX));
-						}
-						else {
+						} else {
 							$entity->removeEffect(Effect::FIRE_RESISTANCE);
 							$entity->removeEffect(Effect::NIGHT_VISION);
 						}
-					break;
+						break;
 					case 452:
 						if($armor->getChestplate()->hasEnchantment(450)) {
 							$entity->addEffect(Effect::getEffect(Effect::NIGHT_VISION)->setDuration(INT32_MAX));
-						}
-						else {
+						} else {
 							$entity->removeEffect(Effect::NIGHT_VISION);
 						}
-					break;
+						break;
 					default:
 						continue;
-					break;
+						break;
 				}
 			}
 			$item = $armor->getLeggings();
@@ -350,33 +343,30 @@ class EventListener implements Listener {
 						if($armor->getBoots()->hasEnchantment(450)) {
 							$entity->addEffect(Effect::getEffect(Effect::SPEED)->setDuration(INT32_MAX));
 							$entity->addEffect(Effect::getEffect(Effect::JUMP)->setDuration(INT32_MAX));
-						}
-						else {
+						} else {
 							$entity->removeEffect(Effect::SPEED);
 							$entity->removeEffect(Effect::JUMP);
 						}
-					break;
+						break;
 					case 451:
 						if($armor->getBoots()->hasEnchantment(451)) {
 							$entity->addEffect(Effect::getEffect(Effect::SPEED)->setAmplifier(1)->setDuration(INT32_MAX));
 							$entity->addEffect(Effect::getEffect(Effect::JUMP)->setDuration(INT32_MAX));
-						}
-						else {
+						} else {
 							$entity->removeEffect(Effect::SPEED);
 							$entity->removeEffect(Effect::JUMP);
 						}
-					break;
+						break;
 					case 452:
 						if($armor->getBoots()->hasEnchantment(452)) {
 							$entity->addEffect(Effect::getEffect(Effect::JUMP)->setDuration(INT32_MAX));
-						}
-						else {
+						} else {
 							$entity->removeEffect(Effect::JUMP);
 						}
-					break;
+						break;
 					default:
 						continue;
-					break;
+						break;
 				}
 			}
 		}
@@ -390,9 +380,9 @@ class EventListener implements Listener {
 	 */
 	public function onBreak(BlockBreakEvent $event) : void {
 		if($event->getItem()->getEnchantment(1050) !== null and $event->getBlock() instanceof Cobblestone and mt_rand(1, 100) > 95) {
-			$player = $event->getPlayer();
-			$crates = Loader::getInstance()->getCrateManager()->getCratePool();
-			$crate = $crates[array_rand($crates)];
+			$player  = $event->getPlayer();
+			$crates  = Loader::getInstance()->getCrateManager()->getCratePool();
+			$crate   = $crates[array_rand($crates)];
 			$session = Loader::getInstance()->getSessionManager()->getSession($player);
 			$session->addCrateKey($crate->getIdentifier());
 			$player->sendMessage("You got found the {$crate->getName()} Crate key! Do \"/crate keys\" to see how many you have!");

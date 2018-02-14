@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace jasonwynn10\CR\command;
 
 use jasonwynn10\CR\EventListener;
@@ -10,6 +11,7 @@ use pocketmine\command\PluginCommand;
 use pocketmine\Player;
 
 class VoteCommand extends PluginCommand {
+
 	public function __construct(Main $plugin) {
 		parent::__construct("vote", $plugin);
 		$this->setUsage("/vote");

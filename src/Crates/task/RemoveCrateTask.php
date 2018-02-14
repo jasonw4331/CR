@@ -14,8 +14,10 @@ use pocketmine\Player;
 use pocketmine\scheduler\Task;
 
 class RemoveCrateTask extends Task {
+
 	/** @var FloatingTextParticle */
 	private $particle;
+
 	/** @var Player */
 	private $player;
 
@@ -23,11 +25,11 @@ class RemoveCrateTask extends Task {
 	 * RemoveCrateTask constructor.
 	 *
 	 * @param FloatingTextParticle $particle
-	 * @param Player $player
+	 * @param Player               $player
 	 */
 	public function __construct(FloatingTextParticle $particle, Player $player) {
 		$this->particle = $particle;
-		$this->player = $player;
+		$this->player   = $player;
 	}
 
 	public function onRun($currentTick) {

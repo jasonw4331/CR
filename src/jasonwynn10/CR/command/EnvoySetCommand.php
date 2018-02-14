@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace jasonwynn10\CR\command;
 
 use jasonwynn10\CR\entity\Envoy;
@@ -13,6 +14,7 @@ use pocketmine\Player;
 use pocketmine\Server;
 
 class EnvoySetCommand extends PluginCommand {
+
 	/**
 	 * EnvoySetCommand constructor.
 	 *
@@ -27,19 +29,19 @@ class EnvoySetCommand extends PluginCommand {
 
 	/**
 	 * @param CommandSender $sender
-	 * @param string $commandLabel
-	 * @param array $args
+	 * @param string        $commandLabel
+	 * @param array         $args
 	 *
 	 * @return bool|mixed
 	 */
 	public function execute(CommandSender $sender, string $commandLabel, array $args) {
 		if($this->testPermission($sender) and $sender instanceof Player) {
 			$posAABB = new PosAABB($sender->x - (float) $args[0], 0, $sender->z - (float) $args[0], $sender->x + (float) $args[0], $sender->getLevel()->getWorldHeight(), $sender->z + (float) $args[0], $sender->getLevel());
-			$bool = true;
+			$bool    = true;
 			while($bool) {
 				$randX = mt_rand((int) $posAABB->minX, (int) $posAABB->maxX);
 				$randZ = mt_rand((int) $posAABB->minZ, (int) $posAABB->maxZ);
-				$vec = new Vector3($randX, $sender->y, $randZ);
+				$vec   = new Vector3($randX, $sender->y, $randZ);
 				if($vec->distance($sender) >= (float) $args[0] and $vec->distance($sender) < ((float) $args[0] + 1)) {
 					$bool = false;
 				}
@@ -57,12 +59,10 @@ class EnvoySetCommand extends PluginCommand {
 				$rand = mt_rand(1, 100);
 				if($rand > 50) {
 					$name = "Mystical";
-				}
-				else {
+				} else {
 					$name = "Rare";
 				}
-			}
-			else {
+			} else {
 				$name = "Common";
 			}
 			$crystal->setNameTag($name . " Envoy");
@@ -75,8 +75,7 @@ class EnvoySetCommand extends PluginCommand {
 				Server::getInstance()->broadcastMessage($message);
 			}
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}

@@ -13,6 +13,7 @@ use pocketmine\Player;
 use pocketmine\Server;
 
 class SessionManager {
+
 	/** @var Session[] */
 	private $sessionPool = [];
 

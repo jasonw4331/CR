@@ -26,18 +26,25 @@ use pocketmine\Player;
 use pocketmine\Server;
 
 class PlayCrateTask extends HeartTask {
+
 	/** @var CrateBlock */
 	private $block;
+
 	/** @var FloatingTextParticle */
 	private $previousParticle;
+
 	/** @var FloatingTextParticle */
 	private $currentParticle;
+
 	/** @var FloatingTextParticle */
 	private $nextParticle;
+
 	/** @var Player */
 	private $player;
+
 	/** @var Selector */
 	private $selector;
+
 	/** @var bool */
 	private $ended = false;
 
@@ -45,16 +52,16 @@ class PlayCrateTask extends HeartTask {
 	 * PlayCrateTask constructor.
 	 *
 	 * @param CrateBlock $block
-	 * @param Player $player
+	 * @param Player     $player
 	 */
 	public function __construct(CrateBlock $block, Player $player) {
 		Loader::getInstance()->getSessionManager()->getSession($player)->setInCrate();
-		$this->block = $block;
+		$this->block  = $block;
 		$this->player = $player;
 		$this->previousParticle = new FloatingTextParticle($block->add(0.5, 2.25, 0.5), "");
-		$this->currentParticle = new FloatingTextParticle($block->add(0.5, 2, 0.5), "");
-		$this->nextParticle = new FloatingTextParticle($block->add(0.5, 1.75, 0.5), "");
-		$this->selector = new Selector($block->getCrate()->getContent());
+		$this->currentParticle  = new FloatingTextParticle($block->add(0.5, 2, 0.5), "");
+		$this->nextParticle     = new FloatingTextParticle($block->add(0.5, 1.75, 0.5), "");
+		$this->selector         = new Selector($block->getCrate()->getContent());
 		$block->level->addParticle($this->previousParticle, [$player]);
 		$block->level->addParticle($this->currentParticle, [$player]);
 		$block->level->addParticle($this->nextParticle, [$player]);
@@ -70,11 +77,9 @@ class PlayCrateTask extends HeartTask {
 		$this->updateParticles();
 		if($this->getPeriod() >= 16) {
 			$this->ended = true;
-		}
-		elseif($this->getPeriod() > 10) {
+		} elseif($this->getPeriod() > 10) {
 			$this->setPeriod($this->getPeriod() + 5);
-		}
-		else {
+		} else {
 			$this->setPeriod($this->getPeriod() + 1);
 		}
 	}
@@ -84,8 +89,8 @@ class PlayCrateTask extends HeartTask {
 			$session = Loader::getInstance()->getSessionManager()->getSession($this->player);
 			if($session != null) {
 				/** @var CrateContent $content */
-				$content = $this->selector->current();
-				$username = $this->player->getName();
+				$content        = $this->selector->current();
+				$username       = $this->player->getName();
 				$victoryMessage = str_replace("{player}", $username, $content->getWonMessage());
 				$this->previousParticle->setInvisible();
 				$this->nextParticle->setInvisible();
@@ -103,27 +108,29 @@ class PlayCrateTask extends HeartTask {
 						array_shift($arr); // remove username
 						$split = explode(":", array_shift($arr)); // remove id:damage
 						$count = array_shift($arr); // remove count
-						$json = (string) array_shift($arr); // remove json NBT data
+						$json  = (string) array_shift($arr); // remove json NBT data
 						try {
 							/** @var CompoundTag $tags */
 							$tags = JsonNBTParser::parseJSON($json);
-						}catch(\Throwable $ex) {
+						} catch(\Throwable $ex) {
 							continue;
 						}
 						if($this->block->x >= 0) {
 							$pos = $this->block->add(0.5);
-						}
-						else {
+						} else {
 							$pos = $this->block->subtract(0.5);
 						}
 						if($pos->z >= 0) {
 							$pos = $pos->add(0, 0, 0.5);
-						}
-						else {
+						} else {
 							$pos = $pos->subtract(0, 0, 0.5);
 						}
 						/** @noinspection PhpUnhandledExceptionInspection */
-						$entity = $level->dropItem($pos->add(0, 1), ItemFactory::get((int) $split[0], (int) ($split[1] ?? 0), (int) ($count ?? 1), ($tags ?? "")), new Vector3(0, 0, 0), 32767);
+						$entity = $level->dropItem(
+							$pos->add(0, 1),
+							ItemFactory::get((int) $split[0], (int) ($split[1] ?? 0), (int) ($count ?? 1), ($tags ?? "")),
+							new Vector3(0, 0, 0),
+							32767);
 						if($entity !== null) {
 							$server->getScheduler()->scheduleDelayedTask(new RemoveItemEntityTask($entity), 120);
 						}
@@ -133,8 +140,7 @@ class PlayCrateTask extends HeartTask {
 				$server->getScheduler()->scheduleDelayedTask(new RemoveCrateTask($this->currentParticle, $this->player), 120);
 			}
 			$this->stop();
-		}
-		else {
+		} else {
 			$this->move();
 		}
 	}

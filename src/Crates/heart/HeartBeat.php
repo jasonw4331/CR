@@ -11,6 +11,7 @@ namespace Crates\heart;
 use pocketmine\scheduler\Task;
 
 class HeartBeat extends Task {
+
 	/** @var Heart */
 	private $heart;
 

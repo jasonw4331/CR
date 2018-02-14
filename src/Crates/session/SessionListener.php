@@ -13,6 +13,7 @@ use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 
 class SessionListener implements Listener {
+
 	/** @var SessionManager */
 	private $manager;
 

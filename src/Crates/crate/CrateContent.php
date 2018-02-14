@@ -11,10 +11,13 @@ namespace Crates\crate;
 use Crates\Utils;
 
 class CrateContent {
+
 	/** @var string */
 	private $rouletteMessage;
+
 	/** @var array */
 	private $commands = [];
+
 	/** @var string */
 	private $wonMessage;
 
@@ -22,13 +25,13 @@ class CrateContent {
 	 * CrateContent constructor.
 	 *
 	 * @param string $rouletteMessage
-	 * @param array $commands
+	 * @param array  $commands
 	 * @param string $wonMessage
 	 */
 	public function __construct(string $rouletteMessage, array $commands, string $wonMessage) {
 		$this->rouletteMessage = Utils::translateColors($rouletteMessage);
-		$this->commands = $commands;
-		$this->wonMessage = Utils::translateColors($wonMessage);
+		$this->commands        = $commands;
+		$this->wonMessage      = Utils::translateColors($wonMessage);
 	}
 
 	/**

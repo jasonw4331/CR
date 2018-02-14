@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace jasonwynn10\CR\task;
 
 use jasonwynn10\CR\EventListener;
@@ -7,6 +8,7 @@ use jasonwynn10\CR\Main;
 use pocketmine\scheduler\PluginTask;
 
 class CooldownTask extends PluginTask {
+
 	/** @var int $id */
 	private $id;
 
@@ -14,7 +16,7 @@ class CooldownTask extends PluginTask {
 	 * CooldownTask constructor.
 	 *
 	 * @param Main $owner
-	 * @param int $id
+	 * @param int  $id
 	 */
 	public function __construct(Main $owner, int $id) {
 		parent::__construct($owner);

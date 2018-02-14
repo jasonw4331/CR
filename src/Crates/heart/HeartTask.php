@@ -11,8 +11,10 @@ namespace Crates\heart;
 use Crates\Loader;
 
 abstract class HeartTask {
+
 	/** @var int */
 	private $ticked;
+
 	/** @var int */
 	private $toTick;
 
@@ -44,8 +46,7 @@ abstract class HeartTask {
 		if($this->ticked >= $this->toTick) {
 			$this->ticked = 0;
 			$this->tick();
-		}
-		else {
+		} else {
 			$this->ticked++;
 		}
 	}

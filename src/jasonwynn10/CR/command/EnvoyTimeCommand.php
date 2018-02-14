@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace jasonwynn10\CR\command;
 
 use jasonwynn10\CR\Main;
@@ -7,6 +8,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\command\PluginCommand;
 
 class EnvoyTimeCommand extends PluginCommand {
+
 	/**
 	 * EnvoyTimeCommand constructor.
 	 *
@@ -21,8 +23,8 @@ class EnvoyTimeCommand extends PluginCommand {
 
 	/**
 	 * @param CommandSender $sender
-	 * @param string $commandLabel
-	 * @param array $args
+	 * @param string        $commandLabel
+	 * @param array         $args
 	 *
 	 * @return bool|mixed
 	 */

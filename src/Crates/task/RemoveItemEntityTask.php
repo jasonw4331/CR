@@ -1,11 +1,13 @@
 <?php
 declare(strict_types=1);
+
 namespace Crates\task;
 
 use pocketmine\entity\Entity;
 use pocketmine\scheduler\Task;
 
 class RemoveItemEntityTask extends Task {
+
 	/** @var Entity $entity */
 	private $entity;
 

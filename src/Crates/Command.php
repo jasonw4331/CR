@@ -18,6 +18,7 @@ use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 
 class Command extends PMCommand {
+
 	/** @var Main */
 	private $loader;
 
@@ -33,9 +34,9 @@ class Command extends PMCommand {
 
 	public function spawnCrate(Crate $crate, Position $position) {
 		$position = Loader::getInstance()->getCrateManager()->addCrateBlock($crate, new Position($position->getFloorX(), $position->getFloorY(), $position->getFloorZ(), $position->level));
-		$config = new Config($this->loader->getDataFolder() . "blocks.json");
-		$all = $config->getAll();
-		$all[] = [$crate->getIdentifier(), Utils::createPositionString($position)];
+		$config   = new Config($this->loader->getDataFolder() . "blocks.json");
+		$all      = $config->getAll();
+		$all[]    = [$crate->getIdentifier(), Utils::createPositionString($position)];
 		$config->setAll($all);
 		$config->save();
 	}
@@ -48,21 +49,20 @@ class Command extends PMCommand {
 						$session = Loader::getInstance()->getSessionManager()->getSession($sender);
 						if(empty($session->getCrateKeys())) {
 							$sender->sendMessage(TextFormat::RED . "> " . TextFormat::YELLOW . "You haven't any crate key!");
-						}
-						else {
+						} else {
 							$sender->sendMessage(Utils::translateColors("{RED}> {YELLOW}Your keys {RED}<"));
 							foreach(($crateKeys = $session->getCrateKeys()) as $key => $crateIdentifier) {
 								$crate = Loader::getInstance()->getCrateManager()->getCrate($key);
 								if($crate != null) {
-									$sender->sendMessage(TextFormat::GREEN . "- " . TextFormat::WHITE . $crateIdentifier . TextFormat::YELLOW . " " . $crate->getName() . " keys");
+									$sender->sendMessage(TextFormat::GREEN . "- " . TextFormat::WHITE . $crateIdentifier . TextFormat::YELLOW . " " .
+										$crate->getName() . " keys");
 								}
 							}
 						}
-					}
-					else {
+					} else {
 						$sender->sendMessage("Please, run this command in game");
 					}
-				break;
+					break;
 				case "sc":
 				case "spawncoord":
 					if(!isset($args[4])) {
@@ -84,13 +84,12 @@ class Command extends PMCommand {
 					if(isset($args[5])) {
 						$level = $this->loader->getServer()->getLevelByName($args[5]);
 						$level = ($level != null) ? $level : $this->loader->getServer()->getDefaultLevel();
-					}
-					else {
+					} else {
 						$level = $this->loader->getServer()->getDefaultLevel();
 					}
 					$this->spawnCrate($crate, new Position($args[1], $args[2], $args[3], $level));
 					$sender->sendMessage("Successfully spawn a {$crate->getName()} in {$level->getName()}");
-				break;
+					break;
 				case "spawn":
 					if($sender instanceof Player and $sender->isOp()) {
 						if(isset($args[1])) {
@@ -98,16 +97,14 @@ class Command extends PMCommand {
 							if($crate != null) {
 								$this->spawnCrate($crate, $sender);
 								$sender->sendMessage("Successfully spawned a {$crate->getName()}");
-							}
-							else {
+							} else {
 								$sender->sendMessage("{$args[1]} is not a valid crate identifier");
 							}
-						}
-						else {
+						} else {
 							$sender->sendMessage("Usage: /crate spawn <crate identifier>");
 						}
 					}
-				break;
+					break;
 				case "give":
 					if($sender->isOp()) {
 						if(isset($args[1], $args[2])) {
@@ -118,41 +115,34 @@ class Command extends PMCommand {
 									$session = Loader::getInstance()->getSessionManager()->getSession($player);
 									if(isset($args[3]) and is_numeric($args[3])) {
 										$amount = (int) $args[3];
-									}
-									else {
+									} else {
 										$amount = 1;
 									}
 									$session->addCrateKey($crate->getIdentifier(), $amount);
 									$sender->sendMessage("Added a {$crate->getName()} key to {$player->getName()} successfully");
-								}
-								else {
+								} else {
 									$sender->sendMessage("{$args[2]} is not a valid crate identifier");
 								}
-							}
-							else {
+							} else {
 								$sender->sendMessage("{$args[1]} is not a valid player!");
 							}
-						}
-						else {
+						} else {
 							$sender->sendMessage("Usage: /crate give <player> <crate identifier> [amount=1]");
 						}
 					}
-				break;
+					break;
 				default:
 					if($sender->isOp()) {
 						$sender->sendMessage("Usage: /crate <keys|spawncoord|spawn|give> [args]");
-					}
-					else {
+					} else {
 						$sender->sendMessage("Usage: /crate keys");
 					}
-				break;
+					break;
 			}
-		}
-		else {
+		} else {
 			if($sender->isOp()) {
 				$sender->sendMessage("Usage: /crate <keys|spawncoord|spawn|give> [args]");
-			}
-			else {
+			} else {
 				$sender->sendMessage("Usage: /crate keys");
 			}
 		}

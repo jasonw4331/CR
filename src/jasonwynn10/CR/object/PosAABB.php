@@ -6,6 +6,7 @@ use pocketmine\level\Level;
 use pocketmine\math\AxisAlignedBB;
 
 class PosAABB extends AxisAlignedBB {
+
 	/** @var Level $level */
 	protected $level;
 
@@ -34,11 +35,12 @@ class PosAABB extends AxisAlignedBB {
 
 	/**
 	 * @param AxisAlignedBB $AABB
-	 * @param Level $level
+	 * @param Level         $level
 	 *
 	 * @return PosAABB
 	 */
 	public static function fromObject(AxisAlignedBB $AABB, Level $level) : self {
 		return new self($AABB->minX, $AABB->minY, $AABB->minZ, $AABB->maxX, $AABB->maxY, $AABB->maxZ, $level);
 	}
+
 }

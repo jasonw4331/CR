@@ -16,14 +16,19 @@ use pocketmine\Player;
 use pocketmine\utils\Config;
 
 class Session {
+
 	/** @var Player */
 	private $owner;
+
 	/** @var Config */
 	private $config;
+
 	/** @var int[] */
 	private $crateKeys = [];
+
 	/** @var bool */
 	private $inCrate = false;
+
 	/** @var CrateFloatingText[] */
 	private $crateParticles = [];
 
@@ -33,9 +38,11 @@ class Session {
 	 * @param Player $owner
 	 */
 	public function __construct(Player $owner) {
-		$this->owner = $owner;
-		$name = strtolower($owner->getName());
-		$this->config = new Config(Main::getInstance()->getDataFolder() . "users/{$name}.json", Config::JSON, ["crateKeys" => [],]);
+		$this->owner     = $owner;
+		$name            = strtolower($owner->getName());
+		$this->config    = new Config(Main::getInstance()->getDataFolder() . "users/{$name}.json", Config::JSON, [
+			"crateKeys" => [],
+		]);
 		$this->crateKeys = $this->config->get("crateKeys", []);
 	}
 
@@ -77,8 +84,7 @@ class Session {
 	public function hasCrateKey(string $identifier) {
 		if(isset($this->crateKeys[$identifier])) {
 			return $this->crateKeys[$identifier] > 0;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
@@ -92,7 +98,7 @@ class Session {
 
 	/**
 	 * @param string $identifier
-	 * @param int $amount
+	 * @param int    $amount
 	 */
 	public function addCrateKey(string $identifier, int $amount = 1) {
 		$currentAmount = ($this->crateKeys[$identifier] ?? 0) + $amount;
@@ -105,7 +111,7 @@ class Session {
 
 	/**
 	 * @param string $identifier
-	 * @param int $amount
+	 * @param int    $amount
 	 */
 	public function removeCrateKey(string $identifier, int $amount = 1) {
 		$this->addCrateKey($identifier, -$amount);

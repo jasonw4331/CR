@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace jasonwynn10\CR\command;
 
 use jasonwynn10\CR\form\KingdomInformationForm;
@@ -9,6 +10,7 @@ use pocketmine\command\PluginCommand;
 use pocketmine\Player;
 
 class KingdomCommand extends PluginCommand {
+
 	/**
 	 * KingdomCommand constructor.
 	 *

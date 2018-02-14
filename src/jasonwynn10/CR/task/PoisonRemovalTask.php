@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace jasonwynn10\CR\task;
 
 use jasonwynn10\CR\EventListener;
@@ -7,6 +8,7 @@ use jasonwynn10\CR\Main;
 use pocketmine\scheduler\PluginTask;
 
 class PoisonRemovalTask extends PluginTask {
+
 	/** @var int $key */
 	private $key;
 
@@ -14,7 +16,7 @@ class PoisonRemovalTask extends PluginTask {
 	 * PoisonRemovalTask constructor.
 	 *
 	 * @param Main $owner
-	 * @param int $key
+	 * @param int  $key
 	 */
 	public function __construct(Main $owner, int $key) {
 		parent::__construct($owner);

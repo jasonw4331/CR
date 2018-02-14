@@ -1,31 +1,32 @@
 <?php
+
 declare(strict_types=1);
+
 namespace jasonwynn10\CR\form;
 
 use jasonwynn10\CR\Main;
-use pocketmine\form\Form;
-use pocketmine\form\MenuForm;
-use pocketmine\form\MenuOption;
 use pocketmine\Player;
 
-class VoteForm extends MenuForm {
-	/**
-	 * VoteForm constructor.
-	 */
-	public function __construct() {
-		$options = [];
+class VoteForm extends CRSimpleForm {
+
+	protected function setup(Player $player) : void {
+		$this->setTitle("Vote");
+		$this->setContent("Choose a class");
 		foreach(Main::getInstance()->getVoteRanks() as $rank => $data) {
-			$options[] =  new MenuOption($rank);
+			$this->addButton($rank, -1, "", $rank);
 		}
-		parent::__construct("Vote", "Choose a class", $options);
 	}
 
 	/**
 	 * @param Player $player
-	 *
-	 * @return null|Form
+	 * @param mixed  $data
 	 */
-	public function onSubmit(Player $player) : ?Form {
-		return new VoteRankInformationForm($this->getSelectedOption()->getText());
+	public function onSubmit(Player $player, $data) : void {
+		if($data === null) {
+			return;
+		}
+
+		(new VoteRankInformationForm($data))->sendToPlayer($player);
 	}
+
 }

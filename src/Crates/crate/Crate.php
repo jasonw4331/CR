@@ -14,10 +14,13 @@ use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
 class Crate {
+
 	/** @var string */
 	private $name;
+
 	/** @var string */
 	private $identifier;
+
 	/** @var CrateContent[] */
 	private $content = [];
 
@@ -26,12 +29,12 @@ class Crate {
 	 *
 	 * @param string $name
 	 * @param string $identifier
-	 * @param array $content
+	 * @param array  $content
 	 */
 	public function __construct(string $name, string $identifier, array $content) {
-		$this->name = $name;
+		$this->name       = $name;
 		$this->identifier = $identifier;
-		$this->content = $content;
+		$this->content    = $content;
 	}
 
 	/**
@@ -57,15 +60,14 @@ class Crate {
 
 	/**
 	 * @param CrateBlock $block
-	 * @param Player $player
+	 * @param Player     $player
 	 */
 	public function execute(CrateBlock $block, Player $player) {
 		$session = Loader::getInstance()->getSessionManager()->getSession($player);
 		if(!$session->isInCrate()) {
 			if($session->hasCrateKey($this->identifier)) {
 				Loader::getInstance()->getHeart()->startTask(new PlayCrateTask($block, $player));
-			}
-			else {
+			} else {
 				$player->sendMessage(TextFormat::RED . "> " . TextFormat::WHITE . " You need a {$this->name} key to open this crate");
 			}
 		}

@@ -15,16 +15,20 @@ use pocketmine\level\Level;
 use pocketmine\level\particle\FloatingTextParticle;
 use pocketmine\level\Position;
 use pocketmine\math\Vector3;
+use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\tile\Tile;
 
 class CrateBlock extends Position {
+
 	/** @var FloatingTextParticle */
 	private $header;
+
 	/** @var Crate */
 	private $crate;
 
@@ -32,17 +36,23 @@ class CrateBlock extends Position {
 	 * CratePosition constructor.
 	 *
 	 * @param Crate $crate
-	 * @param int $x
-	 * @param int $y
-	 * @param int $z
+	 * @param int   $x
+	 * @param int   $y
+	 * @param int   $z
 	 * @param Level $level
 	 */
 	public function __construct(Crate $crate, int $x, int $y, int $z, Level $level) {
-		$this->crate = $crate;
+		$this->crate  = $crate;
 		$this->header = new FloatingTextParticle(new Vector3($x + 0.5, $y + 1, $z + 0.5), "", Utils::translateColors($crate->getName()));
 		parent::__construct($x, $y, $z, $level);
 		if($level->getBlock($this)->getId() == Block::AIR) {
-			$nbt = new CompoundTag("", [new CompoundTag("Items", []), new StringTag("id", Tile::CHEST), new IntTag("x", $x), new IntTag("y", $y), new IntTag("z", $z),]);
+			$nbt = new CompoundTag("", [
+				new CompoundTag("Items", []),
+				new StringTag("id", Tile::CHEST),
+				new IntTag("x", $x),
+				new IntTag("y", $y),
+				new IntTag("z", $z),
+			]);
 			$level->setBlock($this, Block::get(Block::CHEST));
 			$level->addTile(Tile::createTile("Chest", $level, $nbt));
 		}

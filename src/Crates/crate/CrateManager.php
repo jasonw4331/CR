@@ -14,8 +14,10 @@ use pocketmine\level\Position;
 use pocketmine\utils\Config;
 
 class CrateManager {
+
 	/** @var Crate[] */
 	private $cratePool = [];
+
 	/** @var CrateBlock[] */
 	private $blockPool = [];
 
@@ -59,7 +61,7 @@ class CrateManager {
 	/**
 	 * @param string $name
 	 * @param string $identifier
-	 * @param array $content
+	 * @param array  $content
 	 */
 	public function addCrate(string $name, string $identifier, array $content) {
 		$this->cratePool[$identifier] = new Crate($name, $identifier, $content);
@@ -67,13 +69,13 @@ class CrateManager {
 	}
 
 	/**
-	 * @param Crate $crate
+	 * @param Crate    $crate
 	 * @param Position $position
 	 *
 	 * @return CrateBlock
 	 */
 	public function addCrateBlock(Crate $crate, Position $position) : CrateBlock {
-		$crateBlock = new CrateBlock($crate, $position->x, $position->y, $position->z, $position->level);
+		$crateBlock        = new CrateBlock($crate, $position->x, $position->y, $position->z, $position->level);
 		$this->blockPool[] = $crateBlock;
 		Main::getInstance()->getLogger()->debug("Successfully loaded a CrateBlock");
 		return $crateBlock;
@@ -86,14 +88,15 @@ class CrateManager {
 				continue;
 			}
 			if(is_file($path . $file) and isset($parts[1]) and $parts[1] == "json") {
-				$config = new Config($path . $file);
+				$config  = new Config($path . $file);
 				$content = [];
 				foreach($config->get("content", []) as $array) {
-					$content[] = new CrateContent(($array["rouletteMessage"] ?? "Undefined message"), ($array["commands"] ?? []), ($array["message"] ?? "Undefined won message"));
+					$content[] = new CrateContent(($array["rouletteMessage"] ?? "Undefined message"),
+						($array["commands"] ?? []),
+						($array["message"] ?? "Undefined won message"));
 				}
 				$this->addCrate($config->get("name", "Undefined"), $config->get("identifier", "Undefined"), $content);
-			}
-			else {
+			} else {
 				Main::getInstance()->getLogger()->error("Error while parsing {$file} as crate because it is not a valid JSON file");
 			}
 		}
@@ -103,13 +106,12 @@ class CrateManager {
 		$config = new Config(Main::getInstance()->getDataFolder() . "blocks.json", Config::JSON, []);
 		foreach($config->getAll() as $block) {
 			if(isset($block[1])) {
-				$crate = $this->cratePool[$block[0]] ?? null;
+				$crate    = $this->cratePool[$block[0]] ?? null;
 				$position = Utils::parsePosition($block[1]);
 				if(!(is_null($crate)) and !is_null($position)) {
 					$this->addCrateBlock($crate, $position);
 				}
-			}
-			else {
+			} else {
 				Main::getInstance()->getLogger()->debug("Error while loading a CrateBlock, no data found.");
 			}
 		}

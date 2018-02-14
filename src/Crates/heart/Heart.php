@@ -12,6 +12,7 @@ use Crates\Loader;
 use pocketmine\Server;
 
 class Heart {
+
 	/** @var HeartTask[] */
 	private $taskPool = [];
 

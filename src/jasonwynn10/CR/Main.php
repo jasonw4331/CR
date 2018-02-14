@@ -22,12 +22,12 @@ use jasonwynn10\CR\task\DelayedFormTask;
 use jasonwynn10\CR\task\EnvoyDespawnTask;
 use jasonwynn10\CR\task\EnvoyDropTask;
 use jasonwynn10\CR\task\PowerGiveTask;
+use jojoe77777\FormAPI\Form;
 use onebone\economyapi\EconomyAPI;
 use PiggyCustomEnchants\CustomEnchants\CustomEnchants;
 use pocketmine\command\Command;
 use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
-use pocketmine\form\Form;
 use pocketmine\IPlayer;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
@@ -168,7 +168,6 @@ class Main extends PluginBase {
 
 		foreach($enchantments as $id => $data) {
 			$ce->registerEnchantment($id, $data[0], $data[1], $data[2], $data[3], $data[4], $data[5]);
-			$this->getLogger()->debug("Registered " . $data[0] . " enchantment under id " . $id);
 		}
 		$this->getLogger()->debug("Enchantments Registered!");
 
@@ -619,6 +618,7 @@ class Main extends PluginBase {
 			});
 			break;
 		}
+
 		return new EnchantmentInstance($typeEnchantments[array_rand($typeEnchantments)], mt_rand(1, 10));
 	}
 
