@@ -47,7 +47,7 @@ use pocketmine\utils\TextFormat;
 class Main extends PluginBase {
 	/** @var Main $instance */
 	private static $instance;
-	/** @var int */
+	/** @var int $formCount */
 	public static $formCount = 0;
 	/** @var Config $players */
 	private $players;
@@ -71,7 +71,7 @@ class Main extends PluginBase {
 		return self::$instance;
 	}
 
-	public function onLoad() {
+	public function onLoad() : void {
 		self::$instance = $this;
 		$this->getLogger()->debug("Plugin instance set!");
 
@@ -180,7 +180,7 @@ class Main extends PluginBase {
 		$this->getLogger()->debug("Envoys Loaded!");
 	}
 
-	public function onDisable() {
+	public function onDisable() : void {
 		if(isset($this->crates)) {
 			$this->crates->onDisable();
 		}
@@ -336,7 +336,7 @@ class Main extends PluginBase {
 	 * @param Player $player
 	 * @param string $rank
 	 */
-	public static function givePlayerRank(Player $player, string $rank) {
+	public static function givePlayerRank(Player $player, string $rank) : void {
 		/** @var PurePerms $purePerms */
 		$purePerms = Server::getInstance()->getPluginManager()->getPlugin("PurePerms");
 		$main = self::$instance;

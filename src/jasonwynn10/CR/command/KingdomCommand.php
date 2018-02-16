@@ -18,7 +18,7 @@ class KingdomCommand extends PluginCommand {
 	 */
 	public function __construct(Main $plugin) {
 		parent::__construct("kingdom", $plugin);
-		$this->setUsage("/k");
+		$this->setUsage("/k [chat]");
 		$this->setDescription("Shows all kingdom information");
 		$this->setPermission("cr.command.kingdom");
 		$this->setAliases(["k"]);
@@ -34,6 +34,9 @@ class KingdomCommand extends PluginCommand {
 	public function execute(CommandSender $sender, string $commandLabel, array $args) {
 		if($this->testPermission($sender)) {
 			if($sender instanceof Player) {
+				if(isset($args[0])) {
+					//
+				}
 				Main::sendPlayerDelayedForm($sender, new KingdomInformationForm());
 			}
 			return true;

@@ -62,7 +62,7 @@ class EventListener implements Listener {
 	 */
 	public function __construct(Main $plugin, array $cooldowns) {
 		$plugin->getServer()->getPluginManager()->registerEvents($this, $plugin);
-		$this->plugin    = $plugin;
+		$this->plugin = $plugin;
 		self::$cooldowns = $cooldowns;
 		$plugin->getLogger()->debug("Event Listener Registered!");
 	}
@@ -274,6 +274,11 @@ class EventListener implements Listener {
 					}
 				}
 			}
+		}
+		if($damager instanceof Player and $damaged instanceof Player and $damaged->getHealth() - $event->getFinalDamage() <= 0 and $this->plugin->getPlayerKingdom($damager) !== $this->plugin->getPlayerKingdom($damaged)) {
+			$kingdom = $this->plugin->getPlayerKingdom($damager);
+			$add = (int) $this->plugin->getConfig()->getNested("Power Per Kill", 5);
+			$this->plugin->getConfig()->setNested("Power." . $kingdom, $this->plugin->getKingdomPower($kingdom) + $add);
 		}
 	}
 
