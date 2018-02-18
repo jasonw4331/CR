@@ -183,6 +183,17 @@ class EventListener implements Listener {
 		$format = str_replace("{kingdom}", $kingdom, $event->getFormat());
 		$format = str_replace("{isLeader}", $this->plugin->getKingdomLeader($kingdom) === $player->getName() ? "Leader" : "", $format);
 		$event->setFormat($format);
+		if(Main::inKingdomChat($player)) {
+			$members = $this->plugin->getKingdomMembers($kingdom);
+			$recipients = [];
+			foreach($members as $member) {
+				$recipient = $this->plugin->getServer()->getPlayer($member);
+				if($recipient !== null) {
+					$recipients[] = $recipient;
+				}
+			}
+			$event->setRecipients($recipients);
+		}
 	}
 
 	/**

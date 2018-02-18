@@ -49,6 +49,8 @@ class Main extends PluginBase {
 	private static $instance;
 	/** @var int $formCount */
 	public static $formCount = 0;
+	/** @var string[] $kingdomChat */
+	private static $kingdomChat = [];
 	/** @var Config $players */
 	private $players;
 	/** @var Config $moneyRequestQueue */
@@ -652,5 +654,31 @@ class Main extends PluginBase {
 	 */
 	public function getEnvoyConfig() : Config {
 		return $this->envoyConfig;
+	}
+
+	/**
+	 * @param Player $player
+	 *
+	 * @return bool
+	 */
+	public static function toggleKingdomChat(Player $player) : bool {
+		if(!in_array($player->getLowerCaseName(), self::$kingdomChat)) {
+			self::$kingdomChat[] = $player->getLowerCaseName();
+			return true;
+		}else{
+			$key = array_search($player->getLowerCaseName(), self::$kingdomChat);
+			unset(self::$kingdomChat[$key]);
+			return false;
+		}
+	}
+
+	/**
+	 * @param Player $player
+	 *
+	 * @return bool
+	 */
+	public static function inKingdomChat(Player $player) : bool {
+		$key = array_search($player->getLowerCaseName(), self::$kingdomChat);
+		return $key !== false;
 	}
 }

@@ -35,7 +35,7 @@ class KingdomCommand extends PluginCommand {
 		if($this->testPermission($sender)) {
 			if($sender instanceof Player) {
 				if(isset($args[0])) {
-					//
+					Main::toggleKingdomChat($sender);
 				}
 				Main::sendPlayerDelayedForm($sender, new KingdomInformationForm());
 			}
