@@ -45,7 +45,8 @@ class CombineLogic implements Listener {
 		}
 		if(!isset($anvilInventory))
 			return;
-		//TODO
+		$contents = $anvilInventory->getContents(true);
+		var_dump($contents);
 	}
 
 	/**

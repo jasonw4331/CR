@@ -117,7 +117,7 @@ class EventListener implements Listener {
 			$kingdom = $this->plugin->getKingdomNames()[array_rand($this->plugin->getKingdomNames())];
 			$this->plugin->setPlayerKingdom($player, $kingdom);
 			$locName = array_rand(array_keys(Main::getInstance()->getConfig()->getNested("Kingdoms." . $kingdom, [])));
-			$posArr  = $this->plugin->getConfig()->getNested("Kingdoms." . $kingdom . "." . $locName, []);
+			$posArr = $this->plugin->getConfig()->getNested("Kingdoms." . $kingdom . "." . $locName, []);
 			if(!empty($posArr)) {
 				$level = $this->plugin->getServer()->getLevelByName($posArr["level"]);
 				if($level === null) {
@@ -289,7 +289,7 @@ class EventListener implements Listener {
 		if($damager instanceof Player and $damaged instanceof Player and $damaged->getHealth() - $event->getFinalDamage() <= 0 and $this->plugin->getPlayerKingdom($damager) !== $this->plugin->getPlayerKingdom($damaged)) {
 			$kingdom = $this->plugin->getPlayerKingdom($damager);
 			$add = (int) $this->plugin->getConfig()->getNested("Power Per Kill", 5);
-			$this->plugin->getConfig()->setNested("Power." . $kingdom, $this->plugin->getKingdomPower($kingdom) + $add);
+			$this->plugin->setKingdomPower($this->plugin->getKingdomPower($kingdom) + $add, $kingdom);
 		}
 	}
 

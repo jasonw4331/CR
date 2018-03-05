@@ -250,12 +250,28 @@ class Main extends PluginBase {
 	}
 
 	/**
+	 * @param IPlayer $player
+	 * @param string $kingdom
+	 */
+	public function setKingdomLeader(IPlayer $player, string $kingdom) : void {
+		$this->getConfig()->setNested("Leaders.".$kingdom, $player->getName());
+	}
+
+	/**
 	 * @param string $kingdom
 	 *
 	 * @return int
 	 */
 	public function getKingdomPower(string $kingdom) : int {
 		return $this->getConfig()->getNested("Power.".$kingdom, 0);
+	}
+
+	/**
+	 * @param int $power
+	 * @param string $kingdom
+	 */
+	public function setKingdomPower(int $power, string $kingdom) : void {
+		$this->getConfig()->setNested("Power.".$kingdom, $power);
 	}
 
 	/**
@@ -269,12 +285,33 @@ class Main extends PluginBase {
 	}
 
 	/**
+	 * @param int $money
+	 * @param string $kingdom
+	 *
+	 * @return bool
+	 */
+	public function setKingdomMoney(int $money, string $kingdom) : bool {
+		$return = EconomyAPI::getInstance()->setMoney($kingdom."Kingdom", $money, false, "CR Core");
+		return $return === EconomyAPI::RET_SUCCESS;
+	}
+
+	/**
 	 * @param string $kingdom
 	 *
 	 * @return string[]
 	 */
 	public function getKingdomMembers(string $kingdom) : array {
 		return array_keys($this->players->getAll(), $kingdom);
+	}
+
+	/**
+	 * @param string $kingdom
+	 * @param IPlayer[] $players
+	 */
+	public function setKingdomMembers(string $kingdom, array $players) : void {
+		foreach($players as $player) {
+			$this->players->set($player->getName(), $kingdom);
+		}
 	}
 
 	/**
