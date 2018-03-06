@@ -8,12 +8,16 @@ use pocketmine\block\Anvil;
 use pocketmine\block\Block;
 use pocketmine\event\inventory\InventoryTransactionEvent;
 use pocketmine\event\Listener;
+use pocketmine\inventory\AnvilInventory;
 use pocketmine\inventory\PlayerInventory;
+use pocketmine\item\Item;
+use pocketmine\level\Position;
+use pocketmine\network\mcpe\protocol\UpdateBlockPacket;
 use pocketmine\Player;
 
 class CombineLogic implements Listener {
-	/** @var int[] $ids */
-	private static $ids = [];
+	/** @var string[] $sent */
+	private static $sent;
 
 	/**
 	 * CombineLogic constructor.
@@ -37,16 +41,20 @@ class CombineLogic implements Listener {
 		/** @var PlayerInventory $playerInventory */
 		$playerInventory = null;
 		foreach($transaction->getInventories() as $inventory) {
-			if($inventory->getName() === 'Combine') {
+			if($inventory instanceof AnvilInventory) {
 				$anvilInventory = $inventory;
 			}elseif($inventory instanceof PlayerInventory) {
 				$playerInventory = $inventory;
 			}
 		}
-		if(!isset($anvilInventory))
+		if(!isset($anvilInventory) or !in_array($playerInventory->getName(), self::$sent))
 			return;
+		unset(self::$sent[array_search($playerInventory->getName(), self::$sent)]);
 		$contents = $anvilInventory->getContents(true);
-		var_dump($contents);
+		var_dump($contents); // TODO remove
+
+		$pos = $anvilInventory->getHolder()->asPosition();
+		$pos->getLevel()->sendBlocks([$playerInventory->getHolder()], [Block::get(Block::AIR, 0, $pos)], UpdateBlockPacket::FLAG_ALL_PRIORITY);
 	}
 
 	/**
@@ -54,8 +62,9 @@ class CombineLogic implements Listener {
 	 */
 	public static function sendInventory(Player $player) : void {
 		/** @var Anvil $block */
-		$block = Block::get(Block::ANVIL)->setComponents(floor($player->x), floor($player->y+2), floor($player->z));
-		$inventory = new CombineInventory($block);
-		self::$ids[] = $player->addWindow($inventory);
+		$block = Block::get(Block::ANVIL, Anvil::TYPE_VERY_DAMAGED, new Position((int) floor($player->x), (int) floor($player->y+2), (int) floor($player->z), $player->getLevel()));
+		$player->getLevel()->sendBlocks([$player], [$block], UpdateBlockPacket::FLAG_ALL_PRIORITY);
+		$block->onActivate(Item::get(Item::AIR), $player);
+		self::$sent[] = $player->getName();
 	}
 }
