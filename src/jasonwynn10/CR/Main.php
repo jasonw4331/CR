@@ -629,7 +629,7 @@ class Main extends PluginBase {
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$class = new \ReflectionClass(CustomEnchants::class);
 		/** @var Enchantment[] $enchantments */
-		$enchantments = $class->getStaticPropertyValue("enchantments", []);
+		$enchantments = $class->getStaticProperties()['enchantments'];
 		switch($type) {
 			case "Mythic":
 				/** @var Enchantment[] $typeEnchantments */
