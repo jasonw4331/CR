@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace jasonwynn10\CR\command\Combine;
+namespace jasonwynn10\CR\command\Combine\inventory;
 
 use pocketmine\inventory\CustomInventory;
 use pocketmine\level\Position;
