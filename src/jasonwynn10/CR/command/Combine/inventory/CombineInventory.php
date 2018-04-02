@@ -38,7 +38,5 @@ class CombineInventory extends CustomInventory {
 
 	public function onClose(Player $who) : void {
 		parent::onClose($who);
-
-		$this->dropContents($this->holder->getLevel(), $this->holder->add(0.5, 0.5, 0.5));
 	}
 }

@@ -46,7 +46,6 @@ class CombineLogic implements Listener {
 		if($packet::NETWORK_ID === InventoryTransactionPacket::NETWORK_ID) {
 			$cancel = false;
 			$player = $event->getPlayer();
-			$combine = false;
 			/** @var InventoryAction[] $actions */
 			$actions = [];
 			/** @var InventoryTransactionPacket $packet */
